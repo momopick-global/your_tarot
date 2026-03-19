@@ -13,6 +13,10 @@ const ALLOWED = new Set([
   "astra",
 ]);
 
+export function generateStaticParams() {
+  return Array.from(ALLOWED).map((slug) => ({ slug }));
+}
+
 export default function MasterDetailPage({
   params,
 }: Readonly<{

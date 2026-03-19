@@ -1,6 +1,10 @@
 import { notFound } from "next/navigation";
 import Link from "next/link";
 
+export function generateStaticParams() {
+  return [{ id: "demo" }];
+}
+
 export default function ResultTodayPage({
   params,
 }: Readonly<{
