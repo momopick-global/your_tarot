@@ -28,9 +28,9 @@ export default function Home() {
           <Image
             src={IMG_CRYSTAL_BALL}
             alt="크리스탈볼"
-            width={320}
-            height={213}
-            className="h-auto w-[300px] max-w-full"
+            width={350}
+            height={174}
+            className="h-[174px] w-[350px] max-w-full object-contain"
             priority
           />
         </div>
