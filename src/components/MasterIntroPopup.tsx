@@ -1,19 +1,29 @@
 "use client";
 
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import type { Master } from "@/lib/flowData";
 
 export function MasterIntroPopup({
   master,
   onCardReceive,
+  /** 진입 후 팝업을 보이기까지 대기 (ms). 0이면 즉시 */
+  openDelayMs = 1000,
 }: Readonly<{
   master: Master;
   onCardReceive?: () => void;
+  openDelayMs?: number;
 }>) {
   const [open, setOpen] = useState(true);
+  const [delayPassed, setDelayPassed] = useState(openDelayMs <= 0);
 
-  if (!open) return null;
+  useEffect(() => {
+    if (openDelayMs <= 0) return;
+    const id = window.setTimeout(() => setDelayPassed(true), openDelayMs);
+    return () => window.clearTimeout(id);
+  }, [openDelayMs]);
+
+  if (!open || !delayPassed) return null;
 
   return (
     <div className="fixed inset-0 z-40 flex items-center justify-center px-5" role="dialog" aria-modal="true">
