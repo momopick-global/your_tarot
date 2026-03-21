@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { FlowScene } from "@/components/FlowScene";
 import { HomeShareSection } from "@/components/HomeShareSection";
 import { FLOW_MASTERS } from "@/lib/flowData";
@@ -11,6 +11,8 @@ import { withAssetBase } from "@/lib/publicPath";
 
 /** JSON `diagramSrc`는 `/assets/...` 원본 문자열 — 표시 시 withAssetBase 적용 */
 const DIAGRAM_FALLBACK_PATH = "/assets/master-diagrams/01_Cassian.svg";
+
+const MASTER_DETAIL_OPEN_DELAY_MS = 1000;
 
 type ProfilePopupData = {
   diagramSrc?: string;
@@ -24,6 +26,15 @@ export default function Page01MastersList1() {
   const [selected, setSelected] = useState<string | null>(null);
   const [isDetailOpen, setIsDetailOpen] = useState(false);
   const [showGuide, setShowGuide] = useState(true);
+  const detailOpenTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  useEffect(() => {
+    return () => {
+      if (detailOpenTimerRef.current) {
+        clearTimeout(detailOpenTimerRef.current);
+      }
+    };
+  }, []);
   const masters = useMemo(
     () =>
       FLOW_MASTERS.map((m) => [
@@ -63,22 +74,6 @@ export default function Page01MastersList1() {
           오늘의 운명을 해석할 마스터를 선택하세요
         </h1>
 
-        {showGuide ? (
-          <div className="relative mt-4 rounded-xl border border-primary bg-[rgba(8,7,22,0.78)] p-4 pr-10 text-[13px] leading-[1.5] text-white">
-            <button
-              type="button"
-              onClick={() => setShowGuide(false)}
-              aria-label="안내 닫기"
-              className="absolute right-3 top-2 text-[20px] leading-none text-white/90 hover:text-white"
-            >
-              ×
-            </button>
-            당신에게 가장 잘 맞는 타로 마스터를 선택하세요.
-            <br />
-            각 마스터는 서로 다른 방식으로 운명을 읽어 냅니다.
-          </div>
-        ) : null}
-
         <div className="mt-5 grid grid-cols-3 gap-2.5 pb-8">
           {masters.map(([id, name, kind, image]) => (
             <div key={id} className="contents">
@@ -86,7 +81,14 @@ export default function Page01MastersList1() {
                 type="button"
                 onClick={() => {
                   setSelected(id);
-                  setIsDetailOpen(true);
+                  setIsDetailOpen(false);
+                  if (detailOpenTimerRef.current) {
+                    clearTimeout(detailOpenTimerRef.current);
+                  }
+                  detailOpenTimerRef.current = setTimeout(() => {
+                    setIsDetailOpen(true);
+                    detailOpenTimerRef.current = null;
+                  }, MASTER_DETAIL_OPEN_DELAY_MS);
                 }}
                 className={`rounded-xl border-2 p-1 transition-colors ${
                   selected === id
@@ -132,8 +134,43 @@ export default function Page01MastersList1() {
           )}
         </div>
 
+        {showGuide ? (
+          <div
+            className="fixed inset-0 z-[60] flex items-center justify-center px-5"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="page01-guide-title"
+          >
+            <div className="absolute inset-0 bg-[rgba(2,1,10,0.55)] backdrop-blur-[3px]" aria-hidden />
+            <div className="relative z-10 w-full max-w-[350px] rounded-xl border border-primary bg-[rgba(9,7,28,0.94)] p-4 text-white shadow-2xl">
+              <div className="mb-1 flex justify-end">
+                <button
+                  type="button"
+                  onClick={() => setShowGuide(false)}
+                  aria-label="안내 닫기"
+                  className="text-[22px] leading-none text-white/90 hover:text-white"
+                >
+                  ×
+                </button>
+              </div>
+              <p id="page01-guide-title" className="min-w-0 text-[14px] leading-[1.6] text-white">
+                당신에게 가장 잘 맞는 타로 마스터를 선택하세요.
+                <br />
+                각 마스터는 서로 다른 방식으로 운명을 읽어 냅니다.
+              </p>
+              <button
+                type="button"
+                onClick={() => setShowGuide(false)}
+                className="mt-4 w-full rounded-lg bg-[#6422AB] px-3 py-2.5 text-center text-[16px] font-semibold"
+              >
+                확인
+              </button>
+            </div>
+          </div>
+        ) : null}
+
         {current && isDetailOpen ? (
-          <div className="fixed inset-0 z-40 flex items-center justify-center px-5" role="dialog" aria-modal="true">
+          <div className="fixed inset-0 z-50 flex items-center justify-center px-5" role="dialog" aria-modal="true">
             <button
               type="button"
               onClick={() => setIsDetailOpen(false)}
