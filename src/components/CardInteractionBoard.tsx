@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { useEffect, useMemo, useRef, useState, type PointerEvent as ReactPointerEvent } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState, type PointerEvent as ReactPointerEvent } from "react";
 import { useRouter } from "next/navigation";
 
 const CARD_BACK = "/assets/card-back-page04.png";
@@ -9,6 +9,63 @@ const TOTAL_CARDS = 78;
 const VISIBLE_CARDS = 7;
 const MAX_VISIBLE_OFFSET = Math.floor(VISIBLE_CARDS / 2);
 const clamp = (value: number, min: number, max: number) => Math.min(max, Math.max(min, value));
+const lerp = (a: number, b: number, t: number) => a + (b - a) * t;
+const mod = (n: number, m: number) => ((n % m) + m) % m;
+
+/** public/card_swipe_mobile_demo.html 과 동일 */
+const DRAG_WIDTH_PX = 170;
+
+function easeOutLongTail(t: number) {
+  if (t < 0.8) {
+    const p = t / 0.8;
+    return 0.88 * (1 - Math.pow(1 - p, 3));
+  }
+  const p = (t - 0.8) / 0.2;
+  return 0.88 + 0.12 * (1 - Math.pow(1 - p, 5));
+}
+
+/** 데모 getCardStyle — signed visual offset */
+function getCardStyleDemo(offset: number) {
+  const side = offset === 0 ? 0 : offset > 0 ? 1 : -1;
+  const abs = Math.abs(offset);
+
+  const center = { x: 0, y: -6, scale: 1.12, rotate: 0 };
+  const near = { x: 102, y: 26, scale: 0.95, rotate: 10 };
+  const far = { x: 168, y: 58, scale: 0.85, rotate: 18 };
+  const outer = { x: 184, y: 84, scale: 0.79, rotate: 16 };
+
+  let x = 0;
+  let y = 0;
+  let scale = 1;
+  let rotate = 0;
+
+  if (abs <= 1) {
+    const t = abs;
+    x = lerp(center.x, near.x, t) * side;
+    y = lerp(center.y, near.y, t);
+    scale = lerp(center.scale, near.scale, t);
+    rotate = lerp(center.rotate, near.rotate, t) * side;
+  } else if (abs <= 2) {
+    const t = clamp(abs - 1, 0, 1);
+    x = lerp(near.x, far.x, t) * side;
+    y = lerp(near.y, far.y, t);
+    scale = lerp(near.scale, far.scale, t);
+    rotate = lerp(near.rotate, far.rotate, t) * side;
+  } else if (abs <= 3) {
+    const t = clamp(abs - 2, 0, 1);
+    x = lerp(far.x, outer.x, t) * side;
+    y = lerp(far.y, outer.y, t);
+    scale = lerp(far.scale, outer.scale, t);
+    rotate = lerp(far.rotate, outer.rotate, t) * side;
+  } else {
+    x = outer.x * side;
+    y = outer.y;
+    scale = outer.scale;
+    rotate = outer.rotate * side;
+  }
+
+  return { x, y, scale, rotate };
+}
 
 export function CardInteractionBoard({
   masterId,
@@ -20,30 +77,46 @@ export function CardInteractionBoard({
     Array.from({ length: TOTAL_CARDS }, (_, idx) => idx),
   );
   const [selectedCard, setSelectedCard] = useState(39);
-  const [displayIndex, setDisplayIndex] = useState(39); // fractional deck position
+  /** 카드섞기 흐름용 연속 인덱스 (데모와 별도) */
+  const [displayIndex, setDisplayIndex] = useState(39);
+  /** 일반 스와이프: 데모와 동일 — 중앙 덱 슬롯(0..77) + progress(-1..1) */
+  const [deckCenter, setDeckCenter] = useState(39);
+  const [swipeP, setSwipeP] = useState(0);
+
   const [isFlowing, setIsFlowing] = useState(false);
   const [isOpening, setIsOpening] = useState(false);
-  /** 드래그 중에는 CSS transition 끔 → 모바일에서 손가락과 1:1로 따라옴 */
   const [isDeckDragging, setIsDeckDragging] = useState(false);
+
   const dragStartX = useRef<number | null>(null);
-  const dragStartDisplayIndex = useRef(0);
   const dragStartAt = useRef<number>(0);
   const lastMoveX = useRef<number | null>(null);
   const lastMoveTime = useRef<number | null>(null);
-  const swipeVelocity = useRef(0); // px/ms (instant)
-  const swipeVelocitySmooth = useRef(0); // px/ms (smoothed, 터치 노이즈 완화)
+  const velocityRef = useRef(0);
+
   const displayIndexRef = useRef(39);
-  const flowVelocity = useRef(0); // cards / frame(16.7ms 기준)
+  const deckCenterRef = useRef(39);
+  const swipeTargetRef = useRef(0);
+  const swipeDisplayRef = useRef(0);
+  const isSnapAnimRef = useRef(false);
+
+  const flowVelocity = useRef(0);
   const flowStopRequested = useRef(false);
   const flowLastTime = useRef(0);
   const flowTraveled = useRef(0);
   const draggedEnough = useRef(false);
+
   const rafRef = useRef<number | null>(null);
+  const swipeDragRafRef = useRef<number | null>(null);
+  const swipeSnapRafRef = useRef<number | null>(null);
   const deckOrderRef = useRef(deckOrder);
 
   useEffect(() => {
     displayIndexRef.current = displayIndex;
   }, [displayIndex]);
+
+  useEffect(() => {
+    deckCenterRef.current = deckCenter;
+  }, [deckCenter]);
 
   useEffect(() => {
     deckOrderRef.current = deckOrder;
@@ -52,23 +125,37 @@ export function CardInteractionBoard({
   useEffect(() => {
     return () => {
       if (rafRef.current) cancelAnimationFrame(rafRef.current);
+      if (swipeDragRafRef.current) cancelAnimationFrame(swipeDragRafRef.current);
+      if (swipeSnapRafRef.current) cancelAnimationFrame(swipeSnapRafRef.current);
     };
   }, []);
 
   const cardId = useMemo(() => `${selectedCard + 1}`.padStart(2, "0"), [selectedCard]);
 
-  const [dragSensitivityPx, setDragSensitivityPx] = useState(58);
-  useEffect(() => {
-    try {
-      const mq = window.matchMedia("(pointer: coarse)");
-      const apply = () => setDragSensitivityPx(mq.matches ? 44 : 58);
-      apply();
-      mq.addEventListener?.("change", apply);
-      return () => mq.removeEventListener?.("change", apply);
-    } catch {
-      /* noop */
+  const syncSelectedFromCenter = useCallback((center: number) => {
+    const c = mod(center, TOTAL_CARDS);
+    setSelectedCard(deckOrderRef.current[c] ?? 0);
+  }, []);
+
+  const stopSwipeDragLoop = useCallback(() => {
+    if (swipeDragRafRef.current) {
+      cancelAnimationFrame(swipeDragRafRef.current);
+      swipeDragRafRef.current = null;
     }
   }, []);
+
+  const runSwipeDragLoop = useCallback(() => {
+    swipeDragRafRef.current = null;
+    const smoothing = isSnapAnimRef.current ? 0.22 : 0.34;
+    swipeDisplayRef.current = lerp(swipeDisplayRef.current, swipeTargetRef.current, smoothing);
+    setSwipeP(swipeDisplayRef.current);
+    syncSelectedFromCenter(deckCenterRef.current);
+
+    if (Math.abs(swipeTargetRef.current - swipeDisplayRef.current) > 0.001) {
+      swipeDragRafRef.current = requestAnimationFrame(runSwipeDragLoop);
+    }
+  }, [syncSelectedFromCenter]);
+
   const animateToIndex = (
     target: number,
     onDone?: () => void,
@@ -96,8 +183,7 @@ export function CardInteractionBoard({
 
       setDisplayIndex(target);
       const finalRounded = mod(Math.round(target), TOTAL_CARDS);
-      const cardIdx = deckOrderRef.current[finalRounded] ?? 0;
-      setSelectedCard(cardIdx);
+      setSelectedCard(deckOrderRef.current[finalRounded] ?? 0);
       rafRef.current = null;
       onDone?.();
     };
@@ -123,6 +209,13 @@ export function CardInteractionBoard({
     },
   ) => {
     if (rafRef.current) cancelAnimationFrame(rafRef.current);
+    stopSwipeDragLoop();
+    if (swipeSnapRafRef.current) {
+      cancelAnimationFrame(swipeSnapRafRef.current);
+      swipeSnapRafRef.current = null;
+    }
+    isSnapAnimRef.current = false;
+
     const shouldShuffle = options?.shuffleDeck ?? false;
     const shouldResetToStart = options?.resetToStart ?? false;
 
@@ -135,6 +228,11 @@ export function CardInteractionBoard({
     if (shouldResetToStart) {
       setDisplayIndex(0);
       displayIndexRef.current = 0;
+      setDeckCenter(0);
+      deckCenterRef.current = 0;
+      setSwipeP(0);
+      swipeDisplayRef.current = 0;
+      swipeTargetRef.current = 0;
       setSelectedCard(deckOrderRef.current[0] ?? 0);
     } else {
       const rounded = mod(Math.round(displayIndexRef.current), TOTAL_CARDS);
@@ -180,6 +278,12 @@ export function CardInteractionBoard({
           flowStopRequested.current = false;
           flowLastTime.current = 0;
           flowTraveled.current = 0;
+          const c = mod(Math.round(displayIndexRef.current), TOTAL_CARDS);
+          setDeckCenter(c);
+          deckCenterRef.current = c;
+          setSwipeP(0);
+          swipeDisplayRef.current = 0;
+          swipeTargetRef.current = 0;
         });
         return;
       }
@@ -190,109 +294,157 @@ export function CardInteractionBoard({
     rafRef.current = requestAnimationFrame(tick);
   };
 
+  const snapToNearestDemo = useCallback(
+    (step: number) => {
+      if (swipeSnapRafRef.current) cancelAnimationFrame(swipeSnapRafRef.current);
+      isSnapAnimRef.current = true;
+
+      const from = swipeDisplayRef.current;
+      const to = step === 0 ? 0 : -step;
+      const duration = clamp(980 + Math.abs(step) * 140, 980, 2400);
+      const start = performance.now();
+
+      const tick = (now: number) => {
+        const t = clamp((now - start) / duration, 0, 1);
+        const eased = easeOutLongTail(t);
+        let p = lerp(from, to, eased);
+
+        while (p <= -1) {
+          deckCenterRef.current = mod(deckCenterRef.current + 1, TOTAL_CARDS);
+          p += 1;
+        }
+        while (p >= 1) {
+          deckCenterRef.current = mod(deckCenterRef.current - 1, TOTAL_CARDS);
+          p -= 1;
+        }
+
+        swipeTargetRef.current = p;
+        swipeDisplayRef.current = p;
+        setDeckCenter(deckCenterRef.current);
+        setSwipeP(p);
+        syncSelectedFromCenter(deckCenterRef.current);
+
+        if (t < 1) {
+          swipeSnapRafRef.current = requestAnimationFrame(tick);
+          return;
+        }
+
+        swipeTargetRef.current = 0;
+        swipeDisplayRef.current = 0;
+        setDeckCenter(deckCenterRef.current);
+        setSwipeP(0);
+        syncSelectedFromCenter(deckCenterRef.current);
+        isSnapAnimRef.current = false;
+        swipeSnapRafRef.current = null;
+      };
+
+      swipeSnapRafRef.current = requestAnimationFrame(tick);
+    },
+    [syncSelectedFromCenter],
+  );
+
   const onPointerDown = (e: ReactPointerEvent<HTMLDivElement>) => {
     if (isOpening) return;
-    // 스와이프 감속/스냅 중 다시 터치하면 즉시 정지하고 잡을 수 있게 처리
+
+    if (swipeSnapRafRef.current) {
+      cancelAnimationFrame(swipeSnapRafRef.current);
+      swipeSnapRafRef.current = null;
+      isSnapAnimRef.current = false;
+      swipeTargetRef.current = swipeDisplayRef.current;
+      setSwipeP(swipeDisplayRef.current);
+    }
+
     if (rafRef.current && !isFlowing) {
       cancelAnimationFrame(rafRef.current);
       rafRef.current = null;
-      setDisplayIndex(displayIndexRef.current);
     }
+
     if (isFlowing) {
       flowStopRequested.current = true;
       return;
     }
+
+    stopSwipeDragLoop();
+
     dragStartAt.current = performance.now();
     dragStartX.current = e.clientX;
-    dragStartDisplayIndex.current = displayIndexRef.current;
     lastMoveX.current = e.clientX;
     lastMoveTime.current = performance.now();
-    swipeVelocity.current = 0;
-    swipeVelocitySmooth.current = 0;
+    velocityRef.current = 0;
     draggedEnough.current = false;
+
+    swipeDisplayRef.current = swipeP;
+    swipeTargetRef.current = swipeP;
+    deckCenterRef.current = deckCenter;
+
     setIsDeckDragging(true);
     e.currentTarget.setPointerCapture(e.pointerId);
   };
 
   const onPointerMove = (e: ReactPointerEvent<HTMLDivElement>) => {
-    if (isOpening) return;
-    if (isFlowing) return;
+    if (isOpening || isFlowing) return;
     if (dragStartX.current === null) return;
+
     const delta = e.clientX - dragStartX.current;
     if (Math.abs(delta) > 8) draggedEnough.current = true;
-    const nextDisplay = dragStartDisplayIndex.current + delta / dragSensitivityPx;
-    setDisplayIndex(nextDisplay);
-    displayIndexRef.current = nextDisplay;
-    const rounded = mod(Math.round(nextDisplay), TOTAL_CARDS);
-    setSelectedCard(deckOrderRef.current[rounded] ?? 0);
+
+    swipeTargetRef.current = clamp(delta / DRAG_WIDTH_PX, -1, 1);
+
+    if (swipeDragRafRef.current === null) {
+      swipeDragRafRef.current = requestAnimationFrame(runSwipeDragLoop);
+    }
 
     const now = performance.now();
     if (lastMoveX.current !== null && lastMoveTime.current !== null) {
       const dt = now - lastMoveTime.current;
-      if (dt > 0) {
-        const instant = (e.clientX - lastMoveX.current) / dt;
-        swipeVelocity.current = instant;
-        const alpha = 0.35;
-        swipeVelocitySmooth.current =
-          swipeVelocitySmooth.current * (1 - alpha) + instant * alpha;
-      }
+      if (dt > 0) velocityRef.current = (e.clientX - lastMoveX.current) / dt;
     }
     lastMoveX.current = e.clientX;
     lastMoveTime.current = now;
   };
 
   const onPointerUp = (e: ReactPointerEvent<HTMLDivElement>) => {
-    if (isOpening) return;
-    if (isFlowing) return;
+    if (isOpening || isFlowing) return;
+
+    stopSwipeDragLoop();
+
     if (dragStartX.current !== null) {
       const delta = e.clientX - dragStartX.current;
+      const targetP = clamp(delta / DRAG_WIDTH_PX, -1, 1);
       const elapsed = Math.max(1, performance.now() - dragStartAt.current);
-      const avgVelocity = delta / elapsed; // px/ms
-      const smooth = swipeVelocitySmooth.current;
-      const pick =
-        Math.abs(smooth) > Math.abs(swipeVelocity.current) * 0.85 ? smooth : swipeVelocity.current;
-      const velocity = Math.abs(pick) > Math.abs(avgVelocity) ? pick : avgVelocity;
-      const absVelocity = Math.abs(velocity);
+      const avgVelocity = delta / elapsed;
+      const v = Math.abs(velocityRef.current) > Math.abs(avgVelocity) ? velocityRef.current : avgVelocity;
+      const absV = Math.abs(v);
+      const absProgress = Math.abs(targetP);
+      const absVelocity = Math.abs(velocityRef.current);
 
-      // Swipe carousel: continuous drag -> short inertia -> snap (demo-like).
-      if (Math.abs(delta) >= 8 || absVelocity >= 0.12) {
-        const absProgress = Math.min(1, Math.abs(delta) / 52);
-        const intent = absVelocity > 0.15 ? velocity : delta;
-        const direction = intent > 0 ? 1 : -1; // swipe direction follows finger movement
+      if (Math.abs(delta) >= 8 || absV >= 0.12) {
+        const intent = absVelocity > 0.15 ? velocityRef.current : targetP;
+        const direction = intent < 0 ? 1 : -1;
         const projectedCards = absProgress * 1.55 + absVelocity * 7.8;
         let stepCount = Math.floor(projectedCards + 0.08);
         if (stepCount === 0 && (absProgress > 0.2 || absVelocity > 0.18)) stepCount = 1;
         stepCount = clamp(stepCount, 0, 12);
-
-        const target = displayIndexRef.current + direction * stepCount;
-        const duration = Math.min(2400, 980 + stepCount * 140);
-        const easeOutLongTail = (t: number) => {
-          if (t < 0.8) {
-            const p = t / 0.8;
-            return 0.88 * (1 - Math.pow(1 - p, 3));
-          }
-          const p = (t - 0.8) / 0.2;
-          return 0.88 + 0.12 * (1 - Math.pow(1 - p, 5));
-        };
-        animateToIndex(target, undefined, duration, easeOutLongTail);
+        const step = direction * stepCount;
+        snapToNearestDemo(step);
       } else {
-        animateToIndex(Math.round(displayIndexRef.current), undefined, 240);
+        snapToNearestDemo(0);
       }
     }
+
     dragStartX.current = null;
     lastMoveX.current = null;
     lastMoveTime.current = null;
-    swipeVelocity.current = 0;
-    swipeVelocitySmooth.current = 0;
+    velocityRef.current = 0;
     setIsDeckDragging(false);
     e.currentTarget.releasePointerCapture(e.pointerId);
   };
 
-  const mod = (n: number, m: number) => ((n % m) + m) % m;
-
   const startShuffleFlow = () => {
     if (isOpening) return;
     if (isFlowing) return;
+    setDisplayIndex(deckCenterRef.current);
+    displayIndexRef.current = deckCenterRef.current;
     beginFlow("left", 0.5, {
       shuffleDeck: true,
       resetToStart: true,
@@ -321,16 +473,23 @@ export function CardInteractionBoard({
       >
         {Array.from({ length: VISIBLE_CARDS }, (_, index) => {
           const relative = index - MAX_VISIBLE_OFFSET;
-          const base = Math.floor(displayIndex);
-          const fraction = displayIndex - base;
-          const offset = relative - fraction;
-          const deckPos = mod(base + relative, TOTAL_CARDS);
-          const cardIdx = deckOrder[deckPos] ?? 0;
 
-          // 7-card fan: center + left/right 3 cards clearly visible.
-          const clamped = clamp(offset, -3.2, 3.2);
-          const absClamped = Math.abs(clamped);
-          const dir = clamped === 0 ? 0 : clamped > 0 ? 1 : -1;
+          let deckPos: number;
+          let visualOffset: number;
+
+          if (isFlowing) {
+            const base = Math.floor(displayIndex);
+            const fraction = displayIndex - base;
+            visualOffset = relative - fraction;
+            deckPos = mod(base + relative, TOTAL_CARDS);
+          } else {
+            deckPos = mod(deckCenter + relative, TOTAL_CARDS);
+            visualOffset = relative + swipeP;
+          }
+
+          const cardIdx = deckOrder[deckPos] ?? 0;
+          const absVo = Math.abs(visualOffset);
+          const hideSlot = !isFlowing && absVo > 3.1;
 
           let x = 0;
           let y = -6;
@@ -339,63 +498,78 @@ export function CardInteractionBoard({
           let opacity = 1;
           let blur = 0;
 
-          if (absClamped <= 1) {
-            x = dir * (absClamped * 102);
-            y = -6 + absClamped * 32;
-            scale = 1.12 - absClamped * 0.17;
-            rotate = dir * (absClamped * 10);
-          } else if (absClamped <= 2) {
-            const local = absClamped - 1;
-            x = dir * (102 + local * 66);
-            y = 26 + local * 32;
-            scale = 0.95 - local * 0.1;
-            rotate = dir * (10 + local * 8);
-            opacity = 1;
-            blur = local * 0.2;
+          if (isFlowing) {
+            const clamped = clamp(visualOffset, -3.2, 3.2);
+            const absClamped = Math.abs(clamped);
+            const dir = clamped === 0 ? 0 : clamped > 0 ? 1 : -1;
+            if (absClamped <= 1) {
+              x = dir * (absClamped * 102);
+              y = -6 + absClamped * 32;
+              scale = 1.12 - absClamped * 0.17;
+              rotate = dir * (absClamped * 10);
+            } else if (absClamped <= 2) {
+              const local = absClamped - 1;
+              x = dir * (102 + local * 66);
+              y = 26 + local * 32;
+              scale = 0.95 - local * 0.1;
+              rotate = dir * (10 + local * 8);
+              blur = local * 0.2;
+            } else {
+              const local = Math.min(1, absClamped - 2);
+              x = dir * (168 + local * 16);
+              y = 58 + local * 26;
+              scale = 0.85 - local * 0.06;
+              rotate = dir * (18 + local * 6);
+              blur = local * 0.5;
+            }
+            if (absClamped > 3.1) {
+              opacity = 0;
+              blur = 4;
+            }
+            if (absClamped > 0.15) blur = Math.max(1.2, blur);
           } else {
-            const local = Math.min(1, absClamped - 2);
-            x = dir * (168 + local * 16);
-            y = 58 + local * 26;
-            scale = 0.85 - local * 0.06;
-            rotate = dir * (18 + local * 6);
-            opacity = 1;
-            blur = local * 0.5;
-          }
-
-          if (absClamped > 3.1) {
-            opacity = 0;
-            blur = 4;
-          }
-
-          // Center card stays sharp; side cards keep a subtle blur.
-          if (absClamped > 0.15) {
-            blur = Math.max(1.2, blur);
+            const style = getCardStyleDemo(visualOffset);
+            x = style.x;
+            y = style.y;
+            scale = style.scale;
+            rotate = style.rotate;
+            const abs = absVo;
+            opacity = hideSlot ? 0 : abs <= 3 ? 1 : Math.max(0.75, 1 - (abs - 3) * 0.8);
+            blur = hideSlot
+              ? 4
+              : abs < 2.6
+                ? 0
+                : (abs - 2.6) * 0.5;
+            if (!hideSlot && abs > 0.15) blur = Math.max(1.0, blur);
           }
 
           const width = 128;
           const height = 198;
-          const tx = x - width / 2;
-          const zIndex = 320 - Math.round(absClamped * 52);
-          const isVisibleCard = absClamped <= 3.1;
-          const exitY = isOpening ? 120 + absClamped * 16 : 0;
+          const zIndex = 320 - Math.round(absVo * 52);
+          const isVisibleCard = !hideSlot && absVo <= 3.1;
+          const exitY = isOpening ? 120 + absVo * 16 : 0;
           const exitScale = isOpening ? 0.9 : 1;
-          const exitOpacity = isOpening ? Math.max(0, 0.12 - absClamped * 0.02) : 1;
+          const exitOpacity = isOpening ? Math.max(0, 0.12 - absVo * 0.02) : 1;
           const exitBlur = isOpening ? 2.4 : 0;
 
           return (
             <button
-              key={`${deckPos}-${cardIdx}`}
+              key={`${isFlowing ? "f" : "s"}-${deckPos}-${cardIdx}-${relative}`}
               type="button"
               onClick={() => {
                 if (draggedEnough.current) return;
-                setSelectedCard(cardIdx);
-                animateToIndex(base + relative, undefined, 320);
+                if (isFlowing) return;
+                const newCenter = mod(deckCenter + relative, TOTAL_CARDS);
+                setDeckCenter(newCenter);
+                deckCenterRef.current = newCenter;
+                setSwipeP(0);
+                swipeDisplayRef.current = 0;
+                swipeTargetRef.current = 0;
+                setSelectedCard(deckOrderRef.current[newCenter] ?? 0);
               }}
               className={`absolute bottom-0 left-1/2 overflow-hidden rounded-[14px] border bg-[#0f0a24] shadow-[0_14px_26px_rgba(4,3,14,0.5)] ${
-                isDeckDragging
-                  ? ""
-                  : "transition-[transform,filter,opacity] duration-500 ease-out"
-              } ${absClamped < 0.55 ? "border-[#8F55FF]" : "border-[#7A5BC6]"}`}
+                isDeckDragging || isFlowing ? "" : "transition-[transform,filter,opacity] duration-500 ease-out"
+              } ${absVo < 0.55 ? "border-[#8F55FF]" : "border-[#7A5BC6]"}`}
               style={{
                 width,
                 height,
@@ -438,4 +612,3 @@ export function CardInteractionBoard({
     </div>
   );
 }
-
