@@ -2,14 +2,54 @@
 
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter, useSearchParams } from "next/navigation";
+import { Suspense, useEffect, useMemo } from "react";
 import { useUser } from "@/hooks/useUser";
+import {
+  AUTH_RETURN_PATH_KEY,
+  sanitizeAuthReturnPath,
+  setAuthReturnPathFromQuery,
+} from "@/lib/authReturnPath";
 
 const ICON_TALK = "/assets/svg-ic-social-kakao.svg-20eca7d6-4d65-40b8-954f-17463d423b00.png";
 const ICON_FACEBOOK =
   "/assets/svg-ic-share-facebook.svg-527221c9-1874-4fae-83ed-579ce7d4210b.png";
 
-export default function LoginPage() {
-  const { loginWithProvider, authReady } = useUser();
+function parseReturnToParam(raw: string | null): string | null {
+  if (raw == null || raw === "") return null;
+  try {
+    return sanitizeAuthReturnPath(decodeURIComponent(raw));
+  } catch {
+    return null;
+  }
+}
+
+function LoginPageInner() {
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const { loginWithProvider, authReady, user, loading } = useUser();
+
+  const returnToSafe = useMemo(
+    () => parseReturnToParam(searchParams?.get("returnTo") ?? null),
+    [searchParams],
+  );
+
+  /** returnTo 쿼리 ↔ sessionStorage 동기화 (OAuth 후 복귀용) */
+  useEffect(() => {
+    const raw = searchParams?.get("returnTo") ?? null;
+    if (raw) {
+      setAuthReturnPathFromQuery(raw);
+    } else if (typeof window !== "undefined") {
+      sessionStorage.removeItem(AUTH_RETURN_PATH_KEY);
+    }
+  }, [searchParams]);
+
+  /** 이미 로그인된 채로 /login?returnTo= 로 들어온 경우 즉시 복귀 */
+  useEffect(() => {
+    if (loading) return;
+    if (!user || !returnToSafe) return;
+    router.replace(returnToSafe);
+  }, [user, loading, returnToSafe, router]);
 
   const onSocialLogin = async (provider: "google" | "kakao" | "facebook") => {
     try {
@@ -93,3 +133,14 @@ export default function LoginPage() {
   );
 }
 
+export default function LoginPage() {
+  return (
+    <Suspense
+      fallback={
+        <main className="flex-1 px-5 pt-14 text-center text-[14px] text-neutral-60">로딩 중…</main>
+      }
+    >
+      <LoginPageInner />
+    </Suspense>
+  );
+}

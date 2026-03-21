@@ -3,6 +3,7 @@
 import React from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { AuthReturnRedirect } from "@/components/AuthReturnRedirect";
 import { Header } from "./Header";
 import { Footer } from "./Footer";
 
@@ -43,6 +44,7 @@ export function SiteFrame({
 
   return (
     <div className="min-h-screen w-full bg-[#202139] text-neutral-10">
+      <AuthReturnRedirect />
       {!hideHeader ? <Header onMenuClick={() => setIsMenuOpen(true)} /> : null}
       <div className="min-h-[1px]">{children}</div>
       {!hideFooter ? (

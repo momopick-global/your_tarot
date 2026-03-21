@@ -2,6 +2,7 @@
 
 import React from "react";
 import type { Provider, User } from "@supabase/supabase-js";
+import { OAUTH_PENDING_KEY } from "@/lib/authReturnPath";
 import { getSupabaseClient } from "@/lib/supabase";
 
 export type OAuthProvider = "google" | "kakao" | "facebook";
@@ -49,12 +50,19 @@ export function useUser() {
     const redirectTo =
       typeof window !== "undefined" ? `${window.location.origin}/` : undefined;
 
+    if (typeof window !== "undefined") {
+      sessionStorage.setItem(OAUTH_PENDING_KEY, "1");
+    }
+
     const { error } = await supabase.auth.signInWithOAuth({
       provider: PROVIDER_MAP[provider],
       options: { redirectTo },
     });
 
     if (error) {
+      if (typeof window !== "undefined") {
+        sessionStorage.removeItem(OAUTH_PENDING_KEY);
+      }
       throw error;
     }
   };

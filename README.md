@@ -72,6 +72,8 @@ npm run dev -- --port 3025
 - `docs/data-model.md`
 - `docs/api-spec.md`
 - `docs/folder-structure.md`
+- `docs/production-checklist.md` — **프로덕션(Cloudflare Pages + Supabase) 배포 후 점검**
+- `docs/supabase-tarot-results.md` — `tarot_results`·RLS·저장 정책
 
 ## 참고 사항
 
