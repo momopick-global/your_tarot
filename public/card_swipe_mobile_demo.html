@@ -125,6 +125,20 @@
       const deckArea = document.getElementById("deckArea");
       const cardElements = [];
 
+      /** 부모(Next 페이지)에서 iframe으로 열 때 — 중앙 카드 인덱스 0..77 */
+      function notifyParentDeckIndex() {
+        try {
+          if (window.parent && window.parent !== window) {
+            window.parent.postMessage(
+              { type: "yourtarot-swipe-demo-index", index: currentIndex },
+              "*",
+            );
+          }
+        } catch (e) {
+          /* noop */
+        }
+      }
+
       function clamp(value, min, max) {
         return Math.max(min, Math.min(max, value));
       }
@@ -157,6 +171,7 @@
           cardElements.push(el);
         }
         updateCards(0);
+        notifyParentDeckIndex();
       }
 
       // 필수 함수 4: offset -> transform 스타일 계산
@@ -370,6 +385,7 @@
           updateCards(0);
           isSnapping = false;
           snapRafId = null;
+          notifyParentDeckIndex();
         }
 
         snapRafId = requestAnimationFrame(tick);
