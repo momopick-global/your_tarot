@@ -58,9 +58,6 @@
         border-radius: 14px;
         border: 1px solid rgba(197, 172, 255, 0.72);
         background: linear-gradient(165deg, var(--card-a), var(--card-b));
-        /* 모바일 WebKit: 빠른 transform + filter(blur) 조합 시 배경/레이어가 비는 경우 방지 */
-        background-size: cover;
-        background-repeat: no-repeat;
         box-shadow: 0 16px 36px rgba(4, 3, 14, 0.52);
         display: flex;
         align-items: center;
@@ -70,8 +67,7 @@
         font-weight: 700;
         letter-spacing: 0.02em;
         transform-origin: center bottom;
-        -webkit-backface-visibility: hidden;
-        backface-visibility: hidden;
+        will-change: transform, opacity, filter;
       }
 
       .meta {
@@ -242,22 +238,16 @@
           const style = getCardStyle(visualOffset);
           const abs = Math.abs(visualOffset);
           const zIndex = 320 - Math.round(abs * 52);
-          /* 멀리 있는 카드는 블러 대신 투명도로만 깊이감 (GPU 합성 안정) */
-          let opacity = abs <= 3 ? 1 : Math.max(0.75, 1 - (abs - 3) * 0.8);
-          if (abs >= 2.2) {
-            opacity *= 1 - (abs - 2.2) * 0.07;
-          }
-          opacity = Math.max(0.55, opacity);
+          const opacity = abs <= 3 ? 1 : Math.max(0.75, 1 - (abs - 3) * 0.8);
+          const blur = abs < 2.6 ? 0 : (abs - 2.6) * 0.5;
 
           el.style.opacity = String(opacity);
           el.style.zIndex = String(zIndex);
           el.style.pointerEvents = abs < 0.6 ? "auto" : "none";
-          el.style.filter = "none";
-          /* translate3d로 고정 레이어 유지 (iOS Safari에서 배경 사라짐 완화) */
-          const x = style.x.toFixed(2);
-          const y = style.y.toFixed(2);
+          el.style.filter = `blur(${blur.toFixed(2)}px)`;
           el.style.transform =
-            `translate3d(calc(-50% + ${x}px), ${y}px, 0.1px) ` +
+            `translateX(-50%) ` +
+            `translate(${style.x.toFixed(2)}px, ${style.y.toFixed(2)}px) ` +
             `scale(${style.scale.toFixed(4)}) ` +
             `rotate(${style.rotate.toFixed(2)}deg)`;
         }
