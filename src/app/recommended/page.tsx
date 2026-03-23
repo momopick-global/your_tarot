@@ -12,7 +12,7 @@ export default function RecommendedPage() {
           💡 작은 아이디어라도 큰 힘이 됩니다
         </h1>
 
-        <p className="mt-3 text-[14px] leading-[22px] text-neutral-60">
+        <p className="mt-3 text-[16px] leading-[22px] text-neutral-60">
           여러분의 가장 작은 참여가 저희를 성장시킵니다. 🫶
         </p>
 
@@ -22,19 +22,19 @@ export default function RecommendedPage() {
 
         <div className="mt-6 space-y-6">
           <div>
-            <div className="flex items-center gap-2 text-[14px] font-semibold">
+            <div className="flex items-center gap-2 text-[16px] font-semibold">
               <span aria-hidden>✉️</span> 연락처
             </div>
-            <div className="mt-2 h-10 rounded-lg bg-neutral-90/30 px-3 py-2 text-[14px] text-neutral-10">
+            <div className="mt-2 h-10 rounded-lg bg-neutral-90/30 px-3 py-2 text-[16px] text-neutral-10">
               이메일을 남겨주세요.
             </div>
           </div>
 
           <div>
-            <div className="flex items-center gap-2 text-[14px] font-semibold">
+            <div className="flex items-center gap-2 text-[16px] font-semibold">
               <span aria-hidden>📝</span> 내용
             </div>
-            <div className="mt-2 min-h-[98px] rounded-lg bg-neutral-90/30 px-3 py-3 text-[14px] text-neutral-10">
+            <div className="mt-2 min-h-[98px] rounded-lg bg-neutral-90/30 px-3 py-3 text-[16px] text-neutral-10">
               당신의 소중한 의견을 남겨주세요.
             </div>
 
@@ -53,7 +53,7 @@ export default function RecommendedPage() {
 
         <Link
           href="/menu"
-          className="mt-3 block w-full rounded-xl border border-neutral-30 px-5 py-3 text-center text-[14px] font-medium text-neutral-10"
+          className="mt-3 block w-full rounded-xl border border-neutral-30 px-5 py-3 text-center text-[16px] font-medium text-neutral-10"
         >
           메뉴로 돌아가기
         </Link>

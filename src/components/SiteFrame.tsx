@@ -17,7 +17,7 @@ export function SiteFrame({
   hideFooter?: boolean;
 }>) {
   const pathname = usePathname();
-  const { user } = useUser();
+  const { user, logout } = useUser();
   const hideHeader = pathname?.startsWith("/page_07_reading-result_typea");
   const mypageHref = user ? MYPAGE_PATH : loginUrlWithReturnTo(MYPAGE_PATH);
   const [isMenuOpen, setIsMenuOpen] = React.useState(false);
@@ -107,15 +107,28 @@ export function SiteFrame({
                   <Link href="/partner" onClick={closeMenu} className="block">
                     제휴 문의
                   </Link>
-                  <Link href="/login" onClick={closeMenu} className="block">
-                    로그인
-                  </Link>
+                  {user ? (
+                    <button
+                      type="button"
+                      onClick={() => {
+                        closeMenu();
+                        void logout();
+                      }}
+                      className="block text-left"
+                    >
+                      로그아웃
+                    </button>
+                  ) : (
+                    <Link href="/login" onClick={closeMenu} className="block">
+                      로그인
+                    </Link>
+                  )}
                   <Link href={mypageHref} onClick={closeMenu} className="block">
                     마이페이지
                   </Link>
                 </nav>
 
-                <div className="mt-8 border-t border-neutral-30 pt-4 text-[14px] text-neutral-60">
+                <div className="mt-8 border-t border-neutral-30 pt-4 text-[16px] text-neutral-60">
                   <Link href="/terms" onClick={closeMenu} className="hover:underline">
                     이용약관
                   </Link>

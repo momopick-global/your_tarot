@@ -8,7 +8,7 @@ export default function MastersPage() {
       <section className="mx-auto w-full max-w-[390px] px-5 pt-8 pb-6">
         <div className="mx-auto w-full max-w-[350px]">
           <h1 className="text-[18px] font-semibold">타로 마스터 소개</h1>
-          <p className="mt-3 text-[14px] leading-[22px] text-white">
+          <p className="mt-3 text-[16px] leading-[22px] text-white">
             9명의 마스터 중 한 명을 선택해, 당신에게 맞는 리딩 스타일을 확인해보세요.
           </p>
 
@@ -22,7 +22,7 @@ export default function MastersPage() {
                 <div className="relative mx-auto h-[122px] w-[122px] overflow-hidden rounded-xl">
                   <Image src={m.image} alt={m.name} fill className="object-cover" />
                 </div>
-                <div className="mt-2 text-[14px] font-semibold">{m.name}</div>
+                <div className="mt-2 text-[16px] font-semibold">{m.name}</div>
                 <div className="text-[12px] text-[#cfc4ff]">({m.type})</div>
               </Link>
             ))}

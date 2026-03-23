@@ -153,7 +153,7 @@ export default function Page01MastersList1() {
                   ×
                 </button>
               </div>
-              <p id="page01-guide-title" className="min-w-0 text-[14px] leading-[1.6] text-white">
+              <p id="page01-guide-title" className="min-w-0 text-[16px] leading-[1.6] text-white">
                 당신에게 가장 잘 맞는 타로 마스터를 선택하세요.
                 <br />
                 각 마스터는 서로 다른 방식으로 운명을 읽어 냅니다.

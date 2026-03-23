@@ -72,7 +72,7 @@ function LoginPageInner() {
           당신의 별을 더 오래 기억해요.
         </h1>
 
-        <p className="mt-4 text-center text-[14px] leading-[22px] text-neutral-60">
+        <p className="mt-4 text-center text-[16px] leading-[22px] text-neutral-60">
           로그인하면 결과 저장과 맞춤 힌트를 이어서 받을 수 있어요.
         </p>
 
@@ -139,7 +139,7 @@ export default function LoginPage() {
   return (
     <Suspense
       fallback={
-        <main className="flex-1 px-5 pt-14 text-center text-[14px] text-neutral-60">로딩 중…</main>
+        <main className="flex-1 px-5 pt-14 text-center text-[16px] text-neutral-60">로딩 중…</main>
       }
     >
       <LoginPageInner />

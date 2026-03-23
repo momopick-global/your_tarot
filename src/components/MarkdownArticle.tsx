@@ -8,7 +8,7 @@ export function MarkdownArticle({
   markdown: string;
 }>) {
   return (
-    <article className="text-[14px] leading-[22px] text-neutral-10">
+    <article className="text-[16px] leading-[22px] text-neutral-10">
       <ReactMarkdown
         remarkPlugins={[remarkGfm]}
         components={{

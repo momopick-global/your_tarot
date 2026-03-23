@@ -5,7 +5,7 @@ import { useUser } from "@/hooks/useUser";
 import { loginUrlWithReturnTo, MYPAGE_PATH } from "@/lib/authReturnPath";
 
 export default function MenuPage() {
-  const { user } = useUser();
+  const { user, logout } = useUser();
   const mypageHref = user ? MYPAGE_PATH : loginUrlWithReturnTo(MYPAGE_PATH);
 
   return (
@@ -60,20 +60,31 @@ export default function MenuPage() {
               제휴 문의
             </Link>
 
-            <Link
-              href="/login"
-              className="flex items-center gap-3 text-[18px] font-semibold"
-            >
-              <span aria-hidden>🔐</span>
-              로그인
-            </Link>
+            {user ? (
+              <button
+                type="button"
+                onClick={() => void logout()}
+                className="flex items-center gap-3 text-[18px] font-semibold"
+              >
+                <span aria-hidden>🔓</span>
+                로그아웃
+              </button>
+            ) : (
+              <Link
+                href="/login"
+                className="flex items-center gap-3 text-[18px] font-semibold"
+              >
+                <span aria-hidden>🔐</span>
+                로그인
+              </Link>
+            )}
 
             <Link href={mypageHref} className="flex items-center gap-3 text-[18px] font-semibold">
               <span aria-hidden>🦄</span>
               마이페이지
             </Link>
 
-            <div className="pt-2 text-[14px] text-neutral-60">
+            <div className="pt-2 text-[16px] text-neutral-60">
               <Link href="/terms" className="hover:underline">
                 이용약관
               </Link>

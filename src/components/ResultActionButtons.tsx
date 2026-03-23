@@ -287,14 +287,14 @@ export function ResultActionButtons({
               <button
                 type="button"
                 onClick={() => setSaveLoginDialogOpen(false)}
-                className="rounded-xl border border-white/25 bg-transparent px-3 py-2.5 text-[14px] font-medium text-[#e8e0ff]"
+                className="rounded-xl border border-white/25 bg-transparent px-3 py-2.5 text-[16px] font-medium text-[#e8e0ff]"
               >
                 취소
               </button>
               <button
                 type="button"
                 onClick={confirmGuestLoginForSave}
-                className="rounded-xl bg-[#6422AB] px-3 py-2.5 text-[14px] font-semibold text-white"
+                className="rounded-xl bg-[#6422AB] px-3 py-2.5 text-[16px] font-semibold text-white"
               >
                 로그인하기
               </button>

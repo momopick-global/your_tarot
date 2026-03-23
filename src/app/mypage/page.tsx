@@ -104,7 +104,7 @@ export default function MyPage() {
   if (supabaseConfigured && !authLoading && !user) {
     return (
       <main className="flex-1">
-        <section className="mx-auto w-full max-w-[390px] px-5 pt-14 text-center text-[14px] text-[#d8ccff]">
+        <section className="mx-auto w-full max-w-[390px] px-5 pt-14 text-center text-[16px] text-[#d8ccff]">
           로그인 페이지로 이동 중…
         </section>
       </main>
@@ -201,7 +201,7 @@ export default function MyPage() {
           <p>로그인하면 타로 결과가 클라우드에 저장되고, 여기에서 모아볼 수 있어요.</p>
           <Link
             href="/login"
-            className="inline-block rounded-lg bg-[#6422AB] px-4 py-2 text-center text-[14px] font-semibold text-white"
+            className="inline-block rounded-lg bg-[#6422AB] px-4 py-2 text-center text-[16px] font-semibold text-white"
           >
             로그인하기
           </Link>
