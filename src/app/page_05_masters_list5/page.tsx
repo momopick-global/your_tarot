@@ -85,7 +85,7 @@ function Page05MastersList5Inner() {
       <div className="mx-auto w-full max-w-[390px] px-4 pb-2">
         <Link
           href={`/page_06_analyzing?master=${current.id}&card=${card}`}
-          className="block min-h-[48px] rounded-xl border border-primary bg-[rgba(12,10,36,0.92)] px-4 py-3 text-center text-base font-semibold text-[#d8ccff]"
+          className="block min-h-[48px] rounded-xl border border-primary bg-[rgba(12,10,36,0.92)] px-4 py-3 text-center text-sm font-semibold text-[#d8ccff]"
         >
           다음: 분석 화면 보기
         </Link>

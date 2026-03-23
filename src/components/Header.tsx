@@ -2,8 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { usePathname, useSearchParams } from "next/navigation";
-import { Suspense } from "react";
+import { usePathname } from "next/navigation";
 import { useUser } from "@/hooks/useUser";
 import { loginUrlWithReturnTo } from "@/lib/authReturnPath";
 import { withAssetBase } from "@/lib/publicPath";
@@ -19,11 +18,10 @@ function HeaderInner({
   onMenuClick?: () => void;
 }>) {
   const pathname = usePathname() ?? "";
-  const searchParams = useSearchParams();
   const { user } = useUser();
   const isLoggedIn = Boolean(user);
 
-  const returnTo = `${pathname}${searchParams?.toString() ? `?${searchParams.toString()}` : ""}`;
+  const returnTo = pathname || "/";
   const loginHref = loginUrlWithReturnTo(returnTo || "/");
 
   return (
@@ -69,21 +67,5 @@ export function Header({
 }: Readonly<{
   onMenuClick?: () => void;
 }>) {
-  return (
-    <Suspense
-      fallback={
-        <header className="mx-auto w-full max-w-[390px] bg-[#17182E]">
-          <div className="flex h-[42px] w-full items-center justify-between px-0">
-            <div className="h-[42px] w-[42px]" />
-            <Link href="/" aria-label="홈">
-              <Image src={ICON_EYE} alt="YourTarot" width={46} height={28} />
-            </Link>
-            <div className="h-[42px] w-[42px]" />
-          </div>
-        </header>
-      }
-    >
-      <HeaderInner onMenuClick={onMenuClick} />
-    </Suspense>
-  );
+  return <HeaderInner onMenuClick={onMenuClick} />;
 }

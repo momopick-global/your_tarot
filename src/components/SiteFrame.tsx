@@ -4,8 +4,7 @@ import React from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { AuthReturnRedirect } from "@/components/AuthReturnRedirect";
-import { useUser } from "@/hooks/useUser";
-import { loginUrlWithReturnTo, MYPAGE_PATH } from "@/lib/authReturnPath";
+import { MYPAGE_PATH } from "@/lib/authReturnPath";
 import { Header } from "./Header";
 import { Footer } from "./Footer";
 
@@ -17,9 +16,8 @@ export function SiteFrame({
   hideFooter?: boolean;
 }>) {
   const pathname = usePathname();
-  const { user, logout } = useUser();
   const hideHeader = pathname?.startsWith("/page_07_reading-result_typea");
-  const mypageHref = user ? MYPAGE_PATH : loginUrlWithReturnTo(MYPAGE_PATH);
+  const mypageHref = MYPAGE_PATH;
   const [isMenuOpen, setIsMenuOpen] = React.useState(false);
   const [isMenuMounted, setIsMenuMounted] = React.useState(false);
   const [isMenuActive, setIsMenuActive] = React.useState(false);
@@ -107,22 +105,9 @@ export function SiteFrame({
                   <Link href="/partner" onClick={closeMenu} className="block">
                     제휴 문의
                   </Link>
-                  {user ? (
-                    <button
-                      type="button"
-                      onClick={() => {
-                        closeMenu();
-                        void logout();
-                      }}
-                      className="block text-left"
-                    >
-                      로그아웃
-                    </button>
-                  ) : (
-                    <Link href="/login" onClick={closeMenu} className="block">
-                      로그인
-                    </Link>
-                  )}
+                  <Link href="/login" onClick={closeMenu} className="block">
+                    로그인
+                  </Link>
                   <Link href={mypageHref} onClick={closeMenu} className="block">
                     마이페이지
                   </Link>

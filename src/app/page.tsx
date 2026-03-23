@@ -30,6 +30,9 @@ export default function Home() {
             priority
           />
         </div>
+        <p className="mt-2 text-center text-[12px] leading-[18px] text-neutral-30">
+          농부가 개발중입니다
+        </p>
 
         <div className="mt-7 flex items-center justify-center">
           <Link

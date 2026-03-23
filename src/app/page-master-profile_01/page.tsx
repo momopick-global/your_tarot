@@ -35,7 +35,7 @@ function PageMasterProfile01Inner() {
   if (!detail) {
     return (
       <main className="w-full px-4 py-10 text-center text-white">
-        <p className="text-base text-white/80">프로필 데이터를 찾을 수 없습니다.</p>
+        <p className="text-sm text-white/80">프로필 데이터를 찾을 수 없습니다.</p>
         <Link href="/page_01_masters_list_1" className="mt-4 inline-block text-[#d7ccff] underline">
           마스터 목록으로
         </Link>
@@ -91,7 +91,7 @@ function PageMasterProfile01Inner() {
       <div className="mx-auto w-full max-w-[390px] px-4 py-6">
         <Link
           href={`/page_03_card-selection_1?master=${current.id}`}
-          className="block rounded-xl bg-[#6422AB] px-4 py-3 text-center text-base font-semibold text-white"
+          className="block rounded-xl bg-[#6422AB] px-4 py-3 text-center text-sm font-semibold text-white"
         >
           다음: 카드 선택 1
         </Link>

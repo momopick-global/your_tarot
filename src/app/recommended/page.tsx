@@ -25,7 +25,7 @@ export default function RecommendedPage() {
             <div className="flex items-center gap-2 text-[16px] font-semibold">
               <span aria-hidden>✉️</span> 연락처
             </div>
-            <div className="mt-2 h-10 rounded-lg bg-neutral-90/30 px-3 py-2 text-[16px] text-neutral-10">
+            <div className="mt-2 min-h-[44px] rounded-lg bg-neutral-90/30 px-3 py-2.5 text-[16px] leading-[1.35] text-neutral-10">
               이메일을 남겨주세요.
             </div>
           </div>
@@ -34,7 +34,7 @@ export default function RecommendedPage() {
             <div className="flex items-center gap-2 text-[16px] font-semibold">
               <span aria-hidden>📝</span> 내용
             </div>
-            <div className="mt-2 min-h-[98px] rounded-lg bg-neutral-90/30 px-3 py-3 text-[16px] text-neutral-10">
+            <div className="mt-2 min-h-[104px] rounded-lg bg-neutral-90/30 px-3 py-3 text-[16px] leading-[1.4] text-neutral-10">
               당신의 소중한 의견을 남겨주세요.
             </div>
 

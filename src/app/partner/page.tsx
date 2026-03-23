@@ -23,28 +23,28 @@ export default function PartnerPage() {
           <div className="mt-4 space-y-4 text-[16px]">
             <div className="space-y-1">
               <div className="text-neutral-30">회사명 / 브랜드명</div>
-              <div className="h-10 rounded-lg bg-neutral-90/30 px-3 py-2 text-neutral-10">
+              <div className="min-h-[44px] rounded-lg bg-neutral-90/30 px-3 py-2.5 leading-[1.35] text-neutral-10">
                 답답 없이 입력해주세요
               </div>
             </div>
 
             <div className="space-y-1">
               <div className="text-neutral-30">담당자 이름</div>
-              <div className="h-10 rounded-lg bg-neutral-90/30 px-3 py-2 text-neutral-10">
+              <div className="min-h-[44px] rounded-lg bg-neutral-90/30 px-3 py-2.5 leading-[1.35] text-neutral-10">
                 이메일을 받는 담당자
               </div>
             </div>
 
             <div className="space-y-1">
               <div className="text-neutral-30">이메일 주소</div>
-              <div className="h-10 rounded-lg bg-neutral-90/30 px-3 py-2 text-neutral-10">
+              <div className="min-h-[44px] rounded-lg bg-neutral-90/30 px-3 py-2.5 leading-[1.35] text-neutral-10">
                 예: name@company.com
               </div>
             </div>
 
             <div className="space-y-1">
               <div className="text-neutral-30">웹사이트</div>
-              <div className="h-10 rounded-lg bg-neutral-90/30 px-3 py-2 text-neutral-10">
+              <div className="min-h-[44px] rounded-lg bg-neutral-90/30 px-3 py-2.5 leading-[1.35] text-neutral-10">
                 (선택)
               </div>
             </div>

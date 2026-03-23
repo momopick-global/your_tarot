@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect } from "react";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import {
   consumeAuthReturnPath,
   DEFAULT_AFTER_LOGIN_PATH,
@@ -15,14 +15,21 @@ import { getSupabaseClient } from "@/lib/supabase";
  */
 export function AuthReturnRedirect() {
   const router = useRouter();
+  const pathname = usePathname();
 
   useEffect(() => {
+    // OAuth provider redirects back to "/" in this app.
+    // Restricting this effect to home prevents route flicker on normal navigation.
+    if (pathname !== "/") return;
+    if (typeof window === "undefined") return;
+    if (sessionStorage.getItem(OAUTH_PENDING_KEY) !== "1") return;
+
     const supabase = getSupabaseClient();
     if (!supabase) return;
 
-    const { data: sub } = supabase.auth.onAuthStateChange((_event, session) => {
+    const { data: sub } = supabase.auth.onAuthStateChange((event, session) => {
+      if (event !== "SIGNED_IN" && event !== "INITIAL_SESSION") return;
       if (!session?.user) return;
-      if (typeof window === "undefined") return;
       if (sessionStorage.getItem(OAUTH_PENDING_KEY) !== "1") return;
 
       sessionStorage.removeItem(OAUTH_PENDING_KEY);
@@ -33,7 +40,7 @@ export function AuthReturnRedirect() {
     return () => {
       sub.subscription.unsubscribe();
     };
-  }, [router]);
+  }, [pathname, router]);
 
   return null;
 }

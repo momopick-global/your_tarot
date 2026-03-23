@@ -56,7 +56,7 @@ function Page06AnalyzingInner() {
       <div className="mx-auto w-full max-w-[390px] px-4">
         <Link
           href={`/page_07_reading-result_typea?master=${master}&card=${card}`}
-          className="block rounded-xl bg-[#6422AB] px-4 py-3 text-center text-base font-semibold text-white"
+          className="block rounded-xl bg-[#6422AB] px-4 py-3 text-center text-sm font-semibold text-white"
         >
           다음: 결과 화면 보기
         </Link>

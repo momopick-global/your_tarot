@@ -201,7 +201,7 @@ function Page07ReadingResultTypeAInner() {
       <div className="mx-auto w-full max-w-[350px] pb-6 pt-6">
         <Link
           href={`/page_01_masters_list_1?from=${card}`}
-          className="block rounded-xl border border-primary bg-[rgba(16,12,44,0.95)] px-4 py-3 text-center text-base font-semibold text-[#d8ccff]"
+          className="block rounded-xl border border-primary bg-[rgba(16,12,44,0.95)] px-4 py-3 text-center text-sm font-semibold text-[#d8ccff]"
         >
           처음으로 돌아가기
         </Link>
