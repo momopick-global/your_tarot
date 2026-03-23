@@ -11,6 +11,7 @@ import { withAssetBase } from "@/lib/publicPath";
 
 /** JSON `diagramSrc`는 `/assets/...` 원본 문자열 — 표시 시 withAssetBase 적용 */
 const DIAGRAM_FALLBACK_PATH = "/assets/master-diagrams/01_Cassian.svg";
+const GUIDE_POPUP_IMAGE_PATH = "/images/ch.png";
 
 const MASTER_DETAIL_OPEN_DELAY_MS = 1000;
 
@@ -152,6 +153,16 @@ export default function Page01MastersList1() {
                 >
                   ×
                 </button>
+              </div>
+              <div className="mb-3 flex justify-center">
+                <div className="relative h-[124px] w-[124px] overflow-hidden rounded-full">
+                  <Image
+                    src={withAssetBase(GUIDE_POPUP_IMAGE_PATH)}
+                    alt="가이드 마스터 이미지"
+                    fill
+                    className="object-cover"
+                  />
+                </div>
               </div>
               <p id="page01-guide-title" className="min-w-0 text-[16px] leading-[1.6] text-white">
                 당신에게 가장 잘 맞는 타로 마스터를 선택하세요.
