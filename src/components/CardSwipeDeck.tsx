@@ -392,7 +392,7 @@ export function CardSwipeDeck({
         선택 카드: #{String(deckIndex + 1).padStart(2, "0")}
       </div>
 
-      <div className="mt-auto grid grid-cols-2 gap-3 pb-[calc(env(safe-area-inset-bottom)+16px)]">
+      <div className="mt-auto mx-auto grid w-full max-w-[350px] grid-cols-2 gap-3 pb-[calc(env(safe-area-inset-bottom)+16px)]">
         <button
           type="button"
           onClick={() => {

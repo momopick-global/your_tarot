@@ -43,6 +43,7 @@ function Page03CardSelection1Inner() {
             : getMasterBackgroundSrc(current.id, 1)
         }
         sceneClassName="h-[100dvh] min-h-[100dvh] overflow-hidden"
+        contentClassName="px-0"
         backgroundImageClassName={isCardStage ? "brightness-[1.08] contrast-[1.08]" : ""}
         backImageSrc={withAssetBase("/assets/btn-back-page03.png")}
         backImageSize={42}

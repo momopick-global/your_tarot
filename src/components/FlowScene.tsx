@@ -20,6 +20,7 @@ export function FlowScene({
   allowOverflow = false,
   hideDimOverlay = false,
   sceneClassName,
+  contentClassName,
   backgroundImageClassName,
   backStyle = "image",
   backImageSrc,
@@ -34,6 +35,7 @@ export function FlowScene({
   allowOverflow?: boolean;
   hideDimOverlay?: boolean;
   sceneClassName?: string;
+  contentClassName?: string;
   backgroundImageClassName?: string;
   backStyle?: "image" | "custom";
   backImageSrc?: string;
@@ -66,7 +68,7 @@ export function FlowScene({
         <div className="pointer-events-none absolute inset-x-0 bottom-0 z-[2] h-[80px] bg-gradient-to-b from-transparent to-[#202139]" />
       ) : null}
 
-      <div className="relative z-10 mx-auto w-full max-w-[390px] px-4 pt-4">
+      <div className={`relative z-10 mx-auto w-full max-w-[390px] px-4 pt-4 ${contentClassName ?? ""}`}>
         {backHref ? (
           <Link
             href={backHref}
