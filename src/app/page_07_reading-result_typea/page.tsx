@@ -79,16 +79,16 @@ function Page07ReadingResultTypeAInner() {
         hideDimOverlay
       >
         <div className="relative min-h-[560px]">
-          <div className="absolute left-1/2 -top-[20px] z-10 -translate-x-1/2 px-3 text-center text-[24px] font-semibold text-white">
+          <div className="absolute left-1/2 -top-[10px] z-10 -translate-x-1/2 px-3 text-center text-[24px] font-semibold text-white">
             {reading.titleKo}
           </div>
           <div className="absolute left-1/2 top-[27px] z-10 -translate-x-1/2">
             <Image
               src={frontCardSrc}
               alt={`${reading.titleEn} 카드`}
-              width={220}
+              width={280}
               height={372}
-              className="h-auto w-[220px] rounded-[12px] shadow-[0_20px_48px_rgba(0,0,0,0.45)]"
+              className="h-auto w-[280px] rounded-[12px] shadow-[0_20px_48px_rgba(0,0,0,0.45)]"
               priority
             />
           </div>
