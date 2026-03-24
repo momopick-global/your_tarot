@@ -13,9 +13,9 @@
 .card-swipe-deck .card {
   position: absolute;
   left: 50%;
-  bottom: 98px;
-  width: 128px;
-  height: 198px;
+  bottom: 88px;
+  width: 165px;
+  height: 255px;
   border-radius: 14px;
   border: 1px solid rgba(255, 233, 160, 0.86);
   background-image:

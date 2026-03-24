@@ -15,7 +15,7 @@ export function MenuContent({
         <div className="text-[22px] font-semibold">YourTarot</div>
       </div>
 
-      <div className="mt-10 space-y-7">
+      <div className="mt-[30px] space-y-7">
         <div className="space-y-3">
           <Link href="/page_01_masters_list_1" onClick={onLinkClick} className="flex items-center gap-3 text-[18px] font-semibold">
             <span aria-hidden>🔮</span>

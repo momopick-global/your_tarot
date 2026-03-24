@@ -88,11 +88,11 @@ function Page07ReadingResultTypeAInner() {
               alt={`${reading.titleEn} 카드`}
               width={300}
               height={349}
-              className="h-auto w-[300px] rounded-[12px] shadow-[0_20px_48px_rgba(0,0,0,0.45)]"
+              className="h-auto w-[300px] max-w-none shrink-0 rounded-[12px] shadow-[0_20px_48px_rgba(0,0,0,0.45)]"
               priority
             />
           </div>
-          <div className="absolute bottom-[172px] left-1/2 z-10 w-full max-w-[350px] -translate-x-1/2 p-3">
+          <div className="absolute bottom-[2px] left-1/2 z-10 w-full max-w-[350px] -translate-x-1/2 p-3">
             <div className="pt-3 text-center text-[24px] font-semibold tracking-tight text-white">
               {reading.titleEn}
             </div>
@@ -103,7 +103,7 @@ function Page07ReadingResultTypeAInner() {
         </div>
       </FlowScene>
 
-      <div className="relative z-10 -mt-[250px]">
+      <div className="relative z-10 -mt-[100px]">
         <section className="mx-auto w-full max-w-[350px] space-y-3 pb-2 pt-[110px]">
           <div className="space-y-[30px]">
             <Section icon="✨" title="오늘의 운세 요약">
@@ -111,54 +111,56 @@ function Page07ReadingResultTypeAInner() {
             </Section>
 
             <Section icon="⚖️" title="부문별 운세">
-              <p className="mb-2 flex gap-2">
-                <span aria-hidden>💼</span>
-                <span>
-                  <span className="font-semibold text-[#f0e8ff]">업무/학업</span>
-                  <br />
-                  {formatBoldSegments(reading.categories.work)}
-                </span>
-              </p>
-              <p className="mb-2 flex gap-2">
-                <span aria-hidden>❤️</span>
-                <span>
-                  <span className="font-semibold text-[#f0e8ff]">애정</span>
-                  <br />
-                  {formatBoldSegments(reading.categories.love)}
-                </span>
-              </p>
-              <p className="flex gap-2">
-                <span aria-hidden>💰</span>
-                <span>
-                  <span className="font-semibold text-[#f0e8ff]">금전</span>
-                  <br />
-                  {formatBoldSegments(reading.categories.money)}
-                </span>
-              </p>
-              <p className="mt-2 mb-2 flex gap-2">
-                <span aria-hidden>👥</span>
-                <span>
-                  <span className="font-semibold text-[#f0e8ff]">인간관계</span>
-                  <br />
-                  {formatBoldSegments(reading.categories.relationship || "—")}
-                </span>
-              </p>
-              <p className="mb-2 flex gap-2">
-                <span aria-hidden>🏥</span>
-                <span>
-                  <span className="font-semibold text-[#f0e8ff]">건강</span>
-                  <br />
-                  {formatBoldSegments(reading.categories.health || "—")}
-                </span>
-              </p>
-              <p className="flex gap-2">
-                <span aria-hidden>🍀</span>
-                <span>
-                  <span className="font-semibold text-[#f0e8ff]">기회/행운</span>
-                  <br />
-                  {formatBoldSegments(reading.categories.luck || "—")}
-                </span>
-              </p>
+              <div className="grid grid-cols-2 gap-2">
+                <p className="flex gap-2">
+                  <span aria-hidden>💼</span>
+                  <span>
+                    <span className="font-semibold text-[#f0e8ff]">업무/학업</span>
+                    <br />
+                    {formatBoldSegments(reading.categories.work)}
+                  </span>
+                </p>
+                <p className="flex gap-2">
+                  <span aria-hidden>❤️</span>
+                  <span>
+                    <span className="font-semibold text-[#f0e8ff]">애정</span>
+                    <br />
+                    {formatBoldSegments(reading.categories.love)}
+                  </span>
+                </p>
+                <p className="flex gap-2">
+                  <span aria-hidden>💰</span>
+                  <span>
+                    <span className="font-semibold text-[#f0e8ff]">금전</span>
+                    <br />
+                    {formatBoldSegments(reading.categories.money)}
+                  </span>
+                </p>
+                <p className="flex gap-2">
+                  <span aria-hidden>👥</span>
+                  <span>
+                    <span className="font-semibold text-[#f0e8ff]">인간관계</span>
+                    <br />
+                    {formatBoldSegments(reading.categories.relationship || "—")}
+                  </span>
+                </p>
+                <p className="flex gap-2">
+                  <span aria-hidden>🏥</span>
+                  <span>
+                    <span className="font-semibold text-[#f0e8ff]">건강</span>
+                    <br />
+                    {formatBoldSegments(reading.categories.health || "—")}
+                  </span>
+                </p>
+                <p className="flex gap-2">
+                  <span aria-hidden>🍀</span>
+                  <span>
+                    <span className="font-semibold text-[#f0e8ff]">기회/행운</span>
+                    <br />
+                    {formatBoldSegments(reading.categories.luck || "—")}
+                  </span>
+                </p>
+              </div>
             </Section>
 
             <Section icon="💡" title="오늘의 조언">

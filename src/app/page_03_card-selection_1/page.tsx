@@ -42,7 +42,7 @@ function Page03CardSelection1Inner() {
               : getMasterBackgroundSrc(current.id, 2)
             : getMasterBackgroundSrc(current.id, 1)
         }
-        sceneClassName="h-[100dvh] min-h-[100dvh] overflow-hidden"
+        sceneClassName="h-[100dvh] min-h-[100dvh] overflow-hidden border-2 border-red-500 box-border"
         contentClassName="px-0"
         backgroundImageClassName={isCardStage ? "brightness-[1.08] contrast-[1.08]" : ""}
         backImageSrc={withAssetBase("/assets/btn-back-page03.png")}
@@ -52,7 +52,7 @@ function Page03CardSelection1Inner() {
         <div className="relative z-0 h-[calc(100dvh-68px)] min-h-0 w-full overflow-hidden">
           {/* 카드 컨테이너를 상위 포지션 레이어로 분리 */}
           <div className="absolute inset-0 z-20">
-            <div className="relative left-1/2 flex h-full w-screen max-w-[390px] -translate-x-1/2 flex-col">
+            <div className="relative left-1/2 flex h-full w-screen max-w-[390px] -translate-x-1/2 flex-col bg-red-500/20 ring-2 ring-inset ring-red-500">
               {/* 가이드 팝업이 닫힌 뒤에만 카드 덱 표시 */}
               {isCardStage && !isCardGuidePopupOpen ? (
                 <div className={`flex min-h-0 flex-1 flex-col ${isCardDropAnimating ? "card-drop-in" : ""}`}>
