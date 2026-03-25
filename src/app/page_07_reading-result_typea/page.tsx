@@ -11,6 +11,7 @@ import { resolveCardReading } from "@/lib/resolveCardReading";
 import { buildInterpretationText } from "@/lib/tarotResultsDb";
 import { FLOW_MASTERS } from "@/lib/flowData";
 import { withAssetBase } from "@/lib/publicPath";
+import { copyShareUrl, shareToFacebook, shareToKakao, shareToX } from "@/lib/share";
 
 const SHARE_LINK = withAssetBase("/assets/svg-ic-share-link.svg-26940f47-d010-498b-b1e1-68303b31e59e.png");
 const SHARE_KAKAO = withAssetBase("/assets/svg-ic-social-kakao.svg-20eca7d6-4d65-40b8-954f-17463d423b00.png");
@@ -69,6 +70,10 @@ function Page07ReadingResultTypeAInner() {
   const reading = resolveCardReading(current.id, cardIndex);
   const interpretationText = buildInterpretationText(reading);
   const kw = reading.keywords.length ? reading.keywords.join(" · ") : "—";
+  const onCopy = async () => {
+    const ok = await copyShareUrl();
+    window.alert(ok ? "링크가 복사되었습니다." : "링크 복사에 실패했습니다.");
+  };
 
   return (
     <main className="w-full">
@@ -205,10 +210,34 @@ function Page07ReadingResultTypeAInner() {
 
           <div className="mt-6 text-center text-[18px] text-[#d8ccff]">🧿 친구에게 공유하기</div>
           <div className="mt-3 flex justify-center gap-3">
-            <Image src={SHARE_LINK} alt="" width={40} height={40} />
-            <Image src={SHARE_KAKAO} alt="" width={40} height={40} />
-            <Image src={SHARE_FB} alt="" width={40} height={40} />
-            <Image src={SHARE_X} alt="" width={40} height={40} />
+            <button type="button" onClick={onCopy} aria-label="링크 복사" className="inline-flex">
+              <Image src={SHARE_LINK} alt="" width={40} height={40} />
+            </button>
+            <button
+              type="button"
+              onClick={async () => {
+                await shareToKakao({
+                  title: "유어타로 결과",
+                  description: "당신의 운세를 확인하세요",
+                  imageUrl: frontCardSrc,
+                });
+              }}
+              aria-label="카카오 공유"
+              className="inline-flex"
+            >
+              <Image src={SHARE_KAKAO} alt="" width={40} height={40} />
+            </button>
+            <button
+              type="button"
+              onClick={() => shareToFacebook()}
+              aria-label="페이스북 공유"
+              className="inline-flex"
+            >
+              <Image src={SHARE_FB} alt="" width={40} height={40} />
+            </button>
+            <button type="button" onClick={() => shareToX()} aria-label="X 공유" className="inline-flex">
+              <Image src={SHARE_X} alt="" width={40} height={40} />
+            </button>
           </div>
 
           <div className="mt-7 rounded-xl border border-primary/40 bg-[rgba(8,7,22,0.72)] p-3">
