@@ -244,7 +244,7 @@ async function run() {
     const masterId = fileName.replace(".json", "");
     const filePath = path.join(readingsDir, fileName);
     const raw = await readFile(filePath, "utf8");
-    const parsed = JSON.parse(raw);
+    void JSON.parse(raw);
     const next = {};
 
     for (let i = 0; i < 78; i += 1) {

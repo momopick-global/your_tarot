@@ -8,7 +8,7 @@ export type FeedbackPayload = {
   token: string;
 };
 
-export async function useFeedback(payload: FeedbackPayload) {
+export async function submitFeedback(payload: FeedbackPayload) {
   return postJson<{ success: boolean }>(API_ENDPOINTS.feedback, payload);
 }
 

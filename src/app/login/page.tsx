@@ -28,7 +28,7 @@ function parseReturnToParam(raw: string | null): string | null {
 function LoginPageInner() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const { loginWithProvider, authReady, user, loading } = useUser();
+  const { loginWithProvider, user, loading } = useUser();
 
   const returnToSafe = useMemo(
     () => parseReturnToParam(searchParams?.get("returnTo") ?? null),

@@ -9,7 +9,6 @@ import { FlowScene } from "@/components/FlowScene";
 import { MasterIntroPopup } from "@/components/MasterIntroPopup";
 import { FLOW_MASTERS } from "@/lib/flowData";
 import { getMasterBackgroundSrc } from "@/lib/masterCardAssets";
-import { withAssetBase } from "@/lib/publicPath";
 
 function Page03CardSelection1Inner() {
   const searchParams = useSearchParams();

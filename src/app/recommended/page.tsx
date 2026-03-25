@@ -3,7 +3,7 @@
 import Image from "next/image";
 import { useMemo, useState } from "react";
 import { withAssetBase } from "@/lib/publicPath";
-import { useFeedback } from "@/hooks/useFeedback";
+import { submitFeedback } from "@/hooks/useFeedback";
 
 const ICON_EYE = withAssetBase("/assets/svg-logo-yourtarot.svg-699577b6-cedf-4beb-8082-e9fc60a6227c.png");
 
@@ -26,7 +26,7 @@ export default function RecommendedPage() {
     try {
       const token = `local-dev-token-${Date.now()}`;
 
-      await useFeedback({
+      await submitFeedback({
         contact: contact.trim() || undefined,
         content: content.trim(),
         needResponse,

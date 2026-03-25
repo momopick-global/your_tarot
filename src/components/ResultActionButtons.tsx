@@ -49,7 +49,7 @@ export function ResultActionButtons({
   useEffect(() => {
     if (hasSupabase) return;
     const exists = readSavedReadings().some((v) => v.id === localReadingKey);
-    setSavedLocal(exists);
+    queueMicrotask(() => setSavedLocal(exists));
   }, [hasSupabase, localReadingKey]);
 
   useEffect(() => {
@@ -67,15 +67,17 @@ export function ResultActionButtons({
   useEffect(() => {
     if (!hasSupabase || authLoading) return;
     if (!user) {
-      setCloudUi("guest");
+      queueMicrotask(() => setCloudUi("guest"));
       return;
     }
     const key = `yourtarot_cloud_saved:${user.id}:${tarotReadingId}`;
-    if (typeof window !== "undefined" && sessionStorage.getItem(key) === SESSION_SAVED_MARK) {
-      setCloudUi("saved");
-      return;
-    }
-    setCloudUi((prev) => (prev === "saving" ? prev : "idle"));
+    queueMicrotask(() => {
+      if (typeof window !== "undefined" && sessionStorage.getItem(key) === SESSION_SAVED_MARK) {
+        setCloudUi("saved");
+        return;
+      }
+      setCloudUi((prev) => (prev === "saving" ? prev : "idle"));
+    });
   }, [authLoading, hasSupabase, tarotReadingId, user]);
 
   const openGuestSaveDialog = useCallback(() => {

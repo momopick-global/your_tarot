@@ -48,18 +48,15 @@ export default function MyPage() {
   const { user, loading: authLoading, logout } = useUser();
   const supabaseConfigured = useSupabaseConfigured();
 
-  const [savedLocal, setSavedLocal] = useState<SavedReading[]>([]);
+  const [savedLocal, setSavedLocal] = useState<SavedReading[]>(() =>
+    supabaseConfigured ? [] : readSavedReadings(),
+  );
   const [cloudRows, setCloudRows] = useState<TarotResultRow[]>([]);
   const [cloudLoading, setCloudLoading] = useState(false);
   const [cloudError, setCloudError] = useState<string | null>(null);
 
   const masterMap = useMemo(() => new Map(FLOW_MASTERS.map((m) => [m.id, m])), []);
   const masterIdByName = useMemo(() => new Map(FLOW_MASTERS.map((m) => [m.name, m.id])), []);
-
-  useEffect(() => {
-    if (supabaseConfigured) return;
-    setSavedLocal(readSavedReadings());
-  }, [supabaseConfigured]);
 
   const refreshCloud = useCallback(async () => {
     if (!user?.id) {
@@ -76,16 +73,20 @@ export default function MyPage() {
       return;
     }
     setCloudRows(data);
-  }, [user?.id]);
+  }, [user]);
 
   useEffect(() => {
     if (!supabaseConfigured || authLoading) return;
     if (!user) {
-      setCloudRows([]);
-      setCloudLoading(false);
+      queueMicrotask(() => {
+        setCloudRows([]);
+        setCloudLoading(false);
+      });
       return;
     }
-    void refreshCloud();
+    queueMicrotask(() => {
+      void refreshCloud();
+    });
   }, [supabaseConfigured, authLoading, user, refreshCloud]);
 
   /** Supabase 사용 시 비로그인이 /mypage 로 직접 들어오면 로그인으로 */

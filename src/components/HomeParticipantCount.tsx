@@ -16,7 +16,7 @@ export function HomeParticipantCount() {
   useEffect(() => {
     const supabase = getSupabaseClient();
     if (!supabase) {
-      setLabel(FALLBACK_COPY);
+      queueMicrotask(() => setLabel(FALLBACK_COPY));
       return;
     }
 
