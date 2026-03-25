@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import "./globals.css";
+import { GoogleTagManagerNoScript, GoogleTagManagerScript } from "@/components/GoogleTagManager";
 import { SiteFrame } from "@/components/SiteFrame";
 import { WebSiteJsonLd } from "@/components/WebSiteJsonLd";
 import { OG_IMAGE_PATH } from "@/lib/seo/pageMeta";
@@ -70,6 +71,8 @@ export default function RootLayout({
       className="h-full antialiased"
     >
       <body className="min-h-full flex flex-col bg-neutral-90 text-neutral-10">
+        <GoogleTagManagerNoScript />
+        <GoogleTagManagerScript />
         <WebSiteJsonLd />
         <SiteFrame>{children}</SiteFrame>
       </body>
