@@ -7,12 +7,10 @@ import { Suspense } from "react";
 import { FlowScene } from "@/components/FlowScene";
 import { FLOW_MASTERS } from "@/lib/flowData";
 import { getMasterBackgroundSrc } from "@/lib/masterCardAssets";
+import { resolveMasterDiagramSrc } from "@/lib/masterDiagrams";
 import masterProfiles from "@/data/master-profiles.json";
 import { withAssetBase } from "@/lib/publicPath";
 import { masterProfileWith, ROUTES, tarotDrawWithMaster } from "@/lib/routes";
-
-/** JSON `diagramSrc`는 `/assets/...` 원본 — Image에 넣을 때 withAssetBase */
-const DIAGRAM_FALLBACK_PATH = "/assets/master-diagrams/01_Cassian.svg";
 
 type ProfileDetail = {
   name: string;
@@ -44,7 +42,7 @@ function PageMasterProfile01Inner() {
     );
   }
 
-  const diagramSrc = withAssetBase(detail.diagramSrc ?? DIAGRAM_FALLBACK_PATH);
+  const diagramSrc = withAssetBase(resolveMasterDiagramSrc(current.id) || detail.diagramSrc || "");
 
   return (
     <main className="w-full">
@@ -59,7 +57,7 @@ function PageMasterProfile01Inner() {
 
         <div className="mt-4 rounded-xl border border-primary bg-[rgba(7,6,22,0.8)] p-3">
           <div className="mx-auto overflow-hidden rounded-lg">
-            <Image src={diagramSrc} alt="성향 차트" width={300} height={300} className="h-auto w-full" />
+            <Image src={diagramSrc} alt={`${detail.name} 성향 다이어그램`} width={300} height={300} className="h-auto w-full" />
           </div>
           <div className="mt-3 space-y-3 text-[13px] leading-[1.6] text-white">
             <p>✨ 이름 / 유형 / 성별 / 직업</p>
