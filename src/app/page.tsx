@@ -7,7 +7,7 @@ import { ROUTES } from "@/lib/routes";
 import { canonicalPath, OG_IMAGE_PATH } from "@/lib/seo/pageMeta";
 import { withAssetBase } from "@/lib/publicPath";
 
-const HOME_HERO_BG = withAssetBase("/images/page_main_kor.png");
+const HOME_HERO_BG = withAssetBase("/images/main_tarot1.png");
 
 const homeOgTitle = "지금 카드가 말해 주는 오늘의 힌트 | 유어타로";
 const homeOgDescription =
@@ -54,7 +54,7 @@ export default function Home() {
   return (
     <main className="flex-1">
       <section className="relative mx-auto h-[620px] w-full max-w-[390px] overflow-hidden">
-        <Image src={HOME_HERO_BG} alt="" fill priority className="object-cover object-center" />
+        <Image src={HOME_HERO_BG} alt="" fill priority className="object-cover object-top" />
         <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(8,6,25,0.12)_0%,rgba(8,6,25,0.24)_45%,rgba(8,6,25,0.72)_100%)]" />
         <div className="absolute inset-x-0 bottom-8 z-10 px-5">
           <h1 className="text-center text-[24px] font-semibold leading-[34px] text-neutral-10">

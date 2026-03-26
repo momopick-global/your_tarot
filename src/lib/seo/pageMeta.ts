@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 
 /** SNS 공유용 기본 이미지 (metadataBase와 결합해 절대 URL로 출력) */
-export const OG_IMAGE_PATH = "/og/yourtarot_og_kr1.png";
+export const OG_IMAGE_PATH = "/og/yourtarot_og_kr2.png";
 
 const OG_IMAGE = {
   width: 1200,
