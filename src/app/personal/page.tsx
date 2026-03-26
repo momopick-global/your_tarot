@@ -47,7 +47,6 @@ const MARKDOWN = `# 개인정보처리방침
 4. 제3자(광고·분석)에의 제공·연동
 
 - 서비스는 **Google Tag Manager(GTM)** 를 사용해 태그(분석·광고·전환 측정 등)를 배포·관리할 수 있습니다. GTM 자체 및 GTM으로 실행되는 **개별 태그**는 각각 해당 제공자(예: Google, 연동된 광고·분석 사업자)의 정책에 따라 정보를 수집·처리할 수 있으며, Google에 관한 처리는 [Google 개인정보 보호 정책](https://policies.google.com/privacy) 등 해당 사업자의 안내를 따릅니다.
-- **Google Analytics 4(GA4)** 는 **Google 태그(gtag.js)** 등을 통해 접속·이용 통계를 수집할 수 있으며, 쿠키·식별자 처리는 [Google 정책](https://policies.google.com/privacy) 및 [GA 고객센터](https://support.google.com/analytics) 안내를 따릅니다.
 - 서비스는 **Google AdSense 등 제3자 광고·분석 서비스**를 도입할 수 있으며, 이 경우 해당 사업자가 자체 쿠키·SDK 등을 통해 정보를 수집·처리할 수 있습니다.
 - 제3자의 처리는 **해당 사업자의 개인정보처리방침·쿠키 정책**이 적용됩니다. 서비스는 광고주의 개별 광고 콘텐츠에 대해 책임을 지지 않습니다.
 - 사이트 루트의 **ads.txt** 파일은 광고 판매자(게시자) 신원을 공개하기 위한 업계 표준 파일이며, 실제 연동 시 발급받은 식별자로 갱신해야 합니다.
