@@ -18,9 +18,10 @@ export function AuthReturnRedirect() {
   const pathname = usePathname();
 
   useEffect(() => {
-    // OAuth provider redirects back to "/" in this app.
-    // Restricting this effect to home prevents route flicker on normal navigation.
-    if (pathname !== "/") return;
+    // OAuth provider redirects back to "/auth/callback" and can also land on "/".
+    // Restricting this effect to these paths prevents route flicker on normal navigation.
+    const isOAuthLandingPath = pathname === "/" || pathname === "/auth/callback";
+    if (!isOAuthLandingPath) return;
     if (typeof window === "undefined") return;
     if (sessionStorage.getItem(OAUTH_PENDING_KEY) !== "1") return;
 

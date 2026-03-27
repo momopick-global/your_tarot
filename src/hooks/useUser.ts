@@ -13,6 +13,11 @@ const PROVIDER_MAP: Record<OAuthProvider, Provider> = {
   facebook: "facebook",
 };
 
+const OAUTH_SCOPES: Partial<Record<OAuthProvider, string>> = {
+  // KOE205 방지를 위해 카카오 동의항목을 최소 범위로 명시합니다.
+  kakao: "profile_nickname profile_image",
+};
+
 export function useUser() {
   const [user, setUser] = React.useState<User | null>(null);
   const [loading, setLoading] = React.useState(true);
@@ -48,15 +53,22 @@ export function useUser() {
     }
 
     const redirectTo =
-      typeof window !== "undefined" ? `${window.location.origin}/` : undefined;
+      typeof window !== "undefined"
+        ? `${window.location.origin}/auth/callback`
+        : undefined;
 
     if (typeof window !== "undefined") {
       sessionStorage.setItem(OAUTH_PENDING_KEY, "1");
     }
 
+    const scopes = OAUTH_SCOPES[provider];
+
     const { error } = await supabase.auth.signInWithOAuth({
       provider: PROVIDER_MAP[provider],
-      options: { redirectTo },
+      options: {
+        redirectTo,
+        ...(scopes ? { scopes } : {}),
+      },
     });
 
     if (error) {

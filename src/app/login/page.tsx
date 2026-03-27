@@ -56,8 +56,9 @@ function LoginPageInner() {
     try {
       await loginWithProvider(provider);
     } catch (error) {
-      const message =
-        error instanceof Error ? error.message : "로그인 중 문제가 발생했습니다.";
+      const defaultMessage =
+        provider === "kakao" ? "카카오 로그인에 실패했어요." : "로그인 중 문제가 발생했습니다.";
+      const message = error instanceof Error ? error.message || defaultMessage : defaultMessage;
       window.alert(message);
     }
   };
