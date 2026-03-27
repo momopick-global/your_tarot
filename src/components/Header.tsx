@@ -37,7 +37,7 @@ function HeaderInner({
         </button>
 
         <Link href="/" aria-label="홈">
-          <Image src={ICON_EYE} alt="YourTarot" width={46} height={28} style={{ height: "auto" }} />
+          <Image src={ICON_EYE} alt="YourTarot" width={46} height={28} />
         </Link>
 
         {isLoggedIn ? (

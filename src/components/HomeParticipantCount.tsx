@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { getSupabaseClient } from "@/lib/supabase";
 
 const FALLBACK_COPY = "지금까지 많은 분이 테스트했어요.";
+const RPC_DISABLED_KEY = "yourtarot.rpc.get_public_test_participant_count.disabled";
 
 /**
  * Supabase에 `get_public_test_participant_count` RPC가 있으면
@@ -19,6 +20,10 @@ export function HomeParticipantCount() {
       queueMicrotask(() => setLabel(FALLBACK_COPY));
       return;
     }
+    if (typeof window !== "undefined" && localStorage.getItem(RPC_DISABLED_KEY) === "1") {
+      queueMicrotask(() => setLabel(FALLBACK_COPY));
+      return;
+    }
 
     let cancelled = false;
 
@@ -26,6 +31,14 @@ export function HomeParticipantCount() {
       const { data, error } = await supabase.rpc("get_public_test_participant_count");
       if (cancelled) return;
       if (error || data == null) {
+        // RPC가 없는 프로젝트에서는 404가 반복될 수 있어 로컬에 비활성화 플래그를 남깁니다.
+        if (typeof window !== "undefined" && error) {
+          const maybeStatus = (error as { status?: number }).status;
+          const msg = error.message ?? "";
+          if (maybeStatus === 404 || msg.includes("get_public_test_participant_count")) {
+            localStorage.setItem(RPC_DISABLED_KEY, "1");
+          }
+        }
         setLabel(FALLBACK_COPY);
         return;
       }

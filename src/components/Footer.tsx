@@ -12,7 +12,7 @@ export function Footer() {
   return (
     <footer className="mx-auto w-full max-w-[390px] bg-[#17182E] pb-5 pt-0">
       <div className="flex flex-col items-center gap-6">
-        <Image src={ICON_EYE} alt="" width={37} height={28} style={{ height: "auto" }} />
+        <Image src={ICON_EYE} alt="" width={37} height={28} />
 
         <div className="w-[86%] border-t border-[#666666]" />
 
@@ -63,14 +63,14 @@ export function Footer() {
             aria-label="인스타그램"
             className="inline-flex h-10 w-10 items-center justify-center rounded-md"
           >
-            <Image src={ICON_INSTAGRAM} alt="" width={36} height={36} style={{ height: "auto" }} />
+            <Image src={ICON_INSTAGRAM} alt="" width={36} height={36} />
           </a>
           <a
             href="#"
             aria-label="카카오톡"
             className="inline-flex h-10 w-10 items-center justify-center rounded-md"
           >
-            <Image src={ICON_TALK} alt="" width={36} height={36} style={{ height: "auto" }} />
+            <Image src={ICON_TALK} alt="" width={36} height={36} />
           </a>
         </div>
       </div>
