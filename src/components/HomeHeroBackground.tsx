@@ -1,12 +1,33 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { withAssetBase } from "@/lib/publicPath";
 
 const HOME_HERO_BG = withAssetBase("/images/main/yourtarot.gif");
 
+/** 느린 네트워크에서도 로딩 오버레이가 무한히 남지 않도록 상한 */
+const LOAD_TIMEOUT_MS = 25_000;
+
 export function HomeHeroBackground() {
   const [loaded, setLoaded] = useState(false);
+  const imgRef = useRef<HTMLImageElement>(null);
+
+  const markLoaded = () => setLoaded(true);
+
+  /** 이미 캐시되어 있으면 onLoad가 리스너보다 먼저 끝나 로딩이 영원히 남는 경우가 있음 */
+  useLayoutEffect(() => {
+    const el = imgRef.current;
+    if (!el) return;
+    if (el.complete && el.naturalWidth > 0) {
+      setLoaded(true);
+    }
+  }, []);
+
+  useEffect(() => {
+    if (loaded) return;
+    const t = window.setTimeout(() => setLoaded(true), LOAD_TIMEOUT_MS);
+    return () => window.clearTimeout(t);
+  }, [loaded]);
 
   return (
     <>
@@ -15,6 +36,7 @@ export function HomeHeroBackground() {
         히어로만 네이티브 img로 둡니다. (용량이 크면 여전히 느릴 수 있음 → 추후 WebP/MP4 권장)
       */}
       <img
+        ref={imgRef}
         src={HOME_HERO_BG}
         alt=""
         width={390}
@@ -22,8 +44,8 @@ export function HomeHeroBackground() {
         loading="eager"
         decoding="async"
         fetchPriority="high"
-        onLoad={() => setLoaded(true)}
-        onError={() => setLoaded(true)}
+        onLoad={markLoaded}
+        onError={markLoaded}
         className={`absolute inset-0 z-0 h-full w-full object-cover object-top transition-opacity duration-500 ${
           loaded ? "opacity-100" : "opacity-0"
         }`}
