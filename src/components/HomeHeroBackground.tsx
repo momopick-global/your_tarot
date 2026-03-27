@@ -1,6 +1,5 @@
 "use client";
 
-import Image from "next/image";
 import { useState } from "react";
 import { withAssetBase } from "@/lib/publicPath";
 
@@ -11,15 +10,21 @@ export function HomeHeroBackground() {
 
   return (
     <>
-      <Image
+      {/*
+        큰 GIF는 모바일 Safari 등에서 next/image 래퍼와 함께 깨지거나 디코딩 실패하는 경우가 있어
+        히어로만 네이티브 img로 둡니다. (용량이 크면 여전히 느릴 수 있음 → 추후 WebP/MP4 권장)
+      */}
+      <img
         src={HOME_HERO_BG}
         alt=""
-        fill
-        priority
-        sizes="390px"
-        onLoadingComplete={() => setLoaded(true)}
+        width={390}
+        height={620}
+        loading="eager"
+        decoding="async"
+        fetchPriority="high"
+        onLoad={() => setLoaded(true)}
         onError={() => setLoaded(true)}
-        className={`absolute inset-0 z-0 object-cover object-top transition-opacity duration-500 ${
+        className={`absolute inset-0 z-0 h-full w-full object-cover object-top transition-opacity duration-500 ${
           loaded ? "opacity-100" : "opacity-0"
         }`}
       />
