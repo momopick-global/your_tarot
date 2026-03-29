@@ -133,9 +133,9 @@ export function FaqView({ data }: Readonly<{ data: FaqData }>) {
   };
 
   /**
-   * 아코디언: 한 번에 하나만 열림.
-   * 같은 질문을 다시 누르면 닫힘(열린 항목 0개 가능).
-   * 다른 질문을 누르면 기존은 닫히고 새 항목만 열림.
+   * 싱글 오픈: openItemId는 항상 하나(또는 null)만 유지.
+   * 다른 질문을 열면 이전 id는 덮어써져 자동으로 닫힌다(배열 토글이 아님).
+   * 같은 질문 재클릭 시 닫힘(0개 열림 허용).
    */
   const onToggleItem = (itemId: string) => {
     if (openItemId === itemId) {
