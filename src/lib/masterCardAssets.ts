@@ -3,7 +3,7 @@ import { withAssetBase } from "./publicPath";
 /**
  * 마스터 id ↔ 폴더명 (01_Cassian … 09_Pipi)
  * 앞면: /images/cards/{folder}/{0-77}.png
- * 뒷면: /images/masters/{folder}/card-back.png
+ * 뒷면: /images/masters/{folder}/card-back.webp
  */
 export const MASTER_CARD_FOLDER: Record<string, string> = {
   cassian: "01_Cassian",
@@ -31,10 +31,10 @@ export function getMasterCardFrontSrc(masterId: string, cardIndex: number): stri
   return withAssetBase(`/images/cards/${folder}/${n}.png`);
 }
 
-/** 카드 뒷면 — 마스터별 card-back.png (`public/images/masters/{folder}/`) */
+/** 카드 뒷면 — 마스터별 card-back.webp (`public/images/masters/{folder}/`) */
 export function getMasterCardBackSrc(masterId: string): string {
   const folder = getMasterCardFolder(masterId);
-  return withAssetBase(`/images/masters/${folder}/card-back.png`);
+  return withAssetBase(`/images/masters/${folder}/card-back.webp`);
 }
 
 /**
