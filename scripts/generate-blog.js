@@ -5,12 +5,14 @@
 const fs = require("fs");
 const path = require("path");
 
+require("./load-env-local.cjs")();
+
 const ROOT = path.join(__dirname, "..");
 const DATA_DIR = path.join(ROOT, "data", "blog");
 const OUT_DIR = path.join(ROOT, "public", "blog");
 
 const SITE_ORIGIN =
-  (process.env.NEXT_PUBLIC_SITE_URL || "https://yourtarot.cc").replace(/\/$/, "");
+  (process.env.NEXT_PUBLIC_SITE_URL || "https://www.yourtarot.cc").replace(/\/$/, "");
 const BASE_PATH = (process.env.NEXT_PUBLIC_BASE_PATH || "").replace(/\/$/, "");
 const DEFAULT_OG_IMAGE = "/next.svg";
 const PUBLIC_DIR = path.join(ROOT, "public");

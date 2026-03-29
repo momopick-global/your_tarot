@@ -7,13 +7,18 @@
 const fs = require("fs");
 const path = require("path");
 
+require("./load-env-local.cjs")();
+
 const ROOT = path.join(__dirname, "..");
 const DATA_BLOG = path.join(ROOT, "data", "blog");
 const PUBLIC = path.join(ROOT, "public");
 
 const SITE_ORIGIN =
-  (process.env.NEXT_PUBLIC_SITE_URL || "https://yourtarot.cc").replace(/\/$/, "");
+  (process.env.NEXT_PUBLIC_SITE_URL || "https://www.yourtarot.cc").replace(/\/$/, "");
 const BASE_PATH = (process.env.NEXT_PUBLIC_BASE_PATH || "").replace(/\/$/, "");
+/** robots.txt Sitemap 줄 전용 (Search Console·크롤러가 apex 도메인으로 통일할 때) */
+const ROBOTS_SITEMAP_ORIGIN =
+  (process.env.NEXT_PUBLIC_ROBOTS_SITEMAP_ORIGIN || "https://yourtarot.cc").replace(/\/$/, "");
 
 /** sitemap.ts와 동일한 정적 경로 (trailing slash) */
 const STATIC_PATHS = [
@@ -146,7 +151,7 @@ function buildXml() {
 }
 
 function buildRobotsTxt() {
-  const sitemapUrl = `${SITE_ORIGIN}${BASE_PATH}/sitemap.xml`;
+  const sitemapUrl = `${ROBOTS_SITEMAP_ORIGIN}${BASE_PATH}/sitemap.xml`;
   return `User-agent: *
 Allow: /
 

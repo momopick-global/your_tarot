@@ -5,7 +5,7 @@ import { SiteFrame } from "@/components/SiteFrame";
 import { WebSiteJsonLd } from "@/components/WebSiteJsonLd";
 import { OG_IMAGE_PATH } from "@/lib/seo/pageMeta";
 
-const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://yourtarot.cc";
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://www.yourtarot.cc";
 
 /** Next.js가 <head>에 viewport 메타로 주입합니다. */
 export const viewport: Viewport = {
