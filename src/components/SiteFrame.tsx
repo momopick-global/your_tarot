@@ -17,7 +17,6 @@ export function SiteFrame({
 }>) {
   const pathname = usePathname();
   const hideHeader =
-    pathname?.startsWith("/tarot/result") ||
     pathname?.startsWith("/tarot/draw") ||
     pathname?.startsWith("/page_07_reading-result_typea") ||
     pathname?.startsWith("/page_03_card-selection_1");

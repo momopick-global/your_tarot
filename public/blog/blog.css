@@ -19,6 +19,9 @@
 
 body {
   margin: 0;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
   font-family: system-ui, "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
   font-size: 1.0625rem;
   line-height: 1.75;
@@ -38,11 +41,111 @@ a:hover {
 }
 
 .blog-wrap {
-  min-height: 100vh;
+  flex: 1 0 auto;
   width: 100%;
   max-width: var(--frame);
   margin: 0 auto;
   padding: 0 0 3rem;
+}
+
+/* SiteFrame과 동일: 푸터 위 20px 띠 + 푸터 */
+.blog-footer-spacer {
+  flex-shrink: 0;
+  height: 20px;
+  width: 100%;
+  max-width: var(--frame);
+  margin: 0 auto;
+  background: #17182e;
+}
+
+.blog-site-footer {
+  flex-shrink: 0;
+  width: 100%;
+  max-width: var(--frame);
+  margin: 0 auto;
+  background: #17182e;
+  padding: 0 0 1.25rem;
+}
+
+.blog-site-footer-inner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.blog-footer-eye {
+  display: block;
+}
+
+.blog-footer-rule {
+  width: 86%;
+  border: none;
+  border-top: 1px solid #666666;
+  margin: 0;
+}
+
+.blog-footer-rule--tight {
+  padding-top: 1rem;
+}
+
+.blog-footer-nav {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 0.35rem 0.5rem;
+  text-align: center;
+  font-size: 13px;
+  color: #666666;
+}
+
+.blog-footer-nav-link {
+  font-size: 16px;
+  font-weight: 400;
+  color: #ffffff;
+  text-decoration: none;
+  text-underline-offset: 0.15em;
+}
+
+.blog-footer-nav-link:hover {
+  color: #f7f7f7;
+  text-decoration: underline;
+}
+
+.blog-footer-sep {
+  color: #666666;
+  user-select: none;
+}
+
+.blog-footer-legal {
+  width: 86%;
+  text-align: left;
+  font-size: 11px;
+  line-height: 18px;
+  color: #666666;
+}
+
+.blog-footer-social {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding-top: 0.5rem;
+}
+
+.blog-footer-social-btn {
+  display: inline-flex;
+  width: 2.5rem;
+  height: 2.5rem;
+  align-items: center;
+  justify-content: center;
+  border-radius: 0.375rem;
+  text-decoration: none;
+}
+
+.blog-footer-social-btn img {
+  display: block;
 }
 
 /* 메인 Header.tsx와 동일 레이아웃 */
@@ -82,6 +185,9 @@ a:hover {
 
 .blog-logo img {
   display: block;
+  width: 46px;
+  height: 46px;
+  object-fit: contain;
 }
 
 .blog-toolbar {
@@ -287,4 +393,177 @@ a:hover {
 .blog-card .blog-card-meta .cat {
   color: var(--accent);
   margin-right: 0.5rem;
+}
+
+/* 헤더 햄버거 — <button> 리셋 */
+button.blog-icon-btn {
+  padding: 0;
+  margin: 0;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  font: inherit;
+  color: inherit;
+}
+
+/* SiteFrame과 동일: 왼쪽 슬라이드 메뉴 */
+.blog-menu-layer {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.blog-menu-layer.is-open {
+  visibility: visible;
+  pointer-events: auto;
+}
+
+.blog-menu-viewport {
+  margin: 0 auto;
+  max-width: 390px;
+  height: 100%;
+  overflow: hidden;
+}
+
+.blog-menu-stage {
+  position: relative;
+  height: 100%;
+  width: 100%;
+}
+
+.blog-menu-overlay {
+  position: absolute;
+  inset: 0;
+  margin: 0;
+  padding: 0;
+  border: none;
+  background: rgba(0, 0, 0, 0.45);
+  cursor: pointer;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.blog-menu-layer.is-ready .blog-menu-overlay {
+  opacity: 1;
+}
+
+.blog-menu-aside {
+  position: absolute;
+  left: 0;
+  top: 0;
+  height: 100%;
+  width: 82%;
+  max-width: 330px;
+  overflow-y: auto;
+  background: #f7f7f7;
+  color: #202139;
+  padding: 2.5rem 1.5rem;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+  transform: translateX(-100%);
+  transition: transform 0.3s ease;
+}
+
+.blog-menu-layer.is-ready .blog-menu-aside {
+  transform: translateX(0);
+}
+
+.blog-menu-close {
+  position: absolute;
+  left: 0;
+  top: 0;
+  display: grid;
+  width: 42px;
+  height: 42px;
+  place-items: center;
+  margin: 0;
+  padding: 0;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  color: #202139;
+  font-size: 16px;
+  line-height: 1;
+  transform: scale(1.5);
+}
+
+.blog-menu-brand {
+  margin-top: 0.5rem;
+  font-size: 22px;
+  font-weight: 600;
+  color: #202139;
+}
+
+.blog-menu-nav {
+  margin-top: 0;
+}
+
+.blog-menu-block {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  margin-top: 1.75rem;
+}
+
+.blog-menu-block:first-of-type {
+  margin-top: 1.875rem;
+}
+
+.blog-menu-link {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-size: 18px;
+  font-weight: 600;
+  color: #202139;
+  text-decoration: none;
+}
+
+.blog-menu-link:hover {
+  text-decoration: underline;
+}
+
+.blog-menu-ico {
+  flex-shrink: 0;
+}
+
+.blog-menu-foot {
+  margin-top: 1.5rem;
+  padding-top: 0.5rem;
+  font-size: 16px;
+  color: #666666;
+}
+
+.blog-menu-footlink {
+  color: #666666;
+  text-decoration: none;
+}
+
+.blog-menu-footlink:hover {
+  text-decoration: underline;
+}
+
+.blog-menu-dot {
+  color: #666666;
+}
+
+.blog-menu-withdraw {
+  margin-top: 4rem;
+  font-size: 16px;
+}
+
+.blog-menu-withdraw-ico {
+  color: #666666;
+}
+
+.blog-menu-withdraw-link {
+  display: inline-block;
+  margin-top: 0.25rem;
+  color: #202139;
+  text-decoration: none;
+}
+
+.blog-menu-withdraw-link:hover {
+  text-decoration: underline;
 }

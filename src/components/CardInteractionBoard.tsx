@@ -133,7 +133,10 @@ export function CardInteractionBoard({
     };
   }, []);
 
-  const cardId = useMemo(() => `${selectedCard + 1}`.padStart(2, "0"), [selectedCard]);
+  /** 쿼리·에셋(`{n}.webp`)과 동일한 0~77 인덱스 */
+  const cardQueryParam = useMemo(() => String(selectedCard).padStart(2, "0"), [selectedCard]);
+  /** 화면 표기 — 에셋 번호와 동일(0~77) */
+  const displayCardNo = useMemo(() => String(selectedCard).padStart(2, "0"), [selectedCard]);
 
   const syncSelectedFromCenter = useCallback((center: number) => {
     const c = mod(center, TOTAL_CARDS);
@@ -458,7 +461,7 @@ export function CardInteractionBoard({
     if (isOpening) return;
     setIsOpening(true);
     window.setTimeout(() => {
-      router.push(tarotRevealWith(masterId, cardId));
+      router.push(tarotRevealWith(masterId, cardQueryParam));
     }, 520);
   };
 
@@ -590,7 +593,7 @@ export function CardInteractionBoard({
         })}
       </div>
 
-      <div className="pb-6 text-center text-[11px] text-[#b9abdf]">선택 카드: #{cardId}</div>
+      <div className="pb-6 text-center text-[11px] text-[#b9abdf]">선택 카드: #{displayCardNo}</div>
 
       <div className="grid grid-cols-2 gap-3">
         <button

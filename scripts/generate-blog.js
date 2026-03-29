@@ -145,23 +145,121 @@ const QUIZ_LINKS = [
   { href: "/quiz/tarot-reading", label: "타로 리딩" },
 ];
 
-function renderSiteHeader(opts) {
-  const menu = prefix("/menu");
+function renderSiteHeader(opts = {}) {
   const home = prefix("/");
   const login = prefix("/login");
   const imgMenu = prefix("/assets/icon-menu-header-v3.png");
   const imgEye = prefix("/assets/icon-eye-header-v2.png");
   const imgGuest = prefix("/assets/icon-user-guest-v1.png");
+  const toolbar =
+    opts.backHref && opts.backLabel
+      ? `<div class="blog-toolbar">
+    <a class="blog-back" href="${escapeHtml(opts.backHref)}">${escapeHtml(opts.backLabel)}</a>
+  </div>`
+      : "";
   return `<header class="blog-site-header">
     <div class="blog-site-header-inner">
-      <a class="blog-icon-btn" href="${escapeHtml(menu)}" aria-label="메뉴 열기"><img src="${escapeHtml(imgMenu)}" alt="" width="42" height="42" loading="lazy" decoding="async" /></a>
-      <a class="blog-logo" href="${escapeHtml(home)}" aria-label="홈"><img src="${escapeHtml(imgEye)}" alt="YourTarot" width="46" height="28" loading="lazy" decoding="async" /></a>
+      <button type="button" class="blog-icon-btn" data-blog-menu-open aria-label="메뉴 열기"><img src="${escapeHtml(imgMenu)}" alt="" width="42" height="42" loading="lazy" decoding="async" /></button>
+      <a class="blog-logo" href="${escapeHtml(home)}" aria-label="홈"><img src="${escapeHtml(imgEye)}" alt="YourTarot" width="46" height="46" loading="lazy" decoding="async" /></a>
       <a class="blog-icon-btn" href="${escapeHtml(login)}" aria-label="로그인 페이지로 이동"><img src="${escapeHtml(imgGuest)}" alt="" width="42" height="42" loading="lazy" decoding="async" /></a>
     </div>
   </header>
-  <div class="blog-toolbar">
-    <a class="blog-back" href="${escapeHtml(opts.backHref)}">${escapeHtml(opts.backLabel)}</a>
-  </div>`;
+${toolbar}`;
+}
+
+/** 앱 `MenuContent`와 동일 항목 — 왼쪽 슬라이드 메뉴 (blog-menu.js 토글) */
+function renderBlogMenuDrawer() {
+  const blogHref = prefix("/blog/");
+  const mypageHref = prefix("/mypage");
+  const link = (href, icon, label) =>
+    `<a href="${escapeHtml(prefix(href))}" class="blog-menu-link"><span class="blog-menu-ico" aria-hidden="true">${icon}</span>${escapeHtml(label)}</a>`;
+  return `<div id="blog-menu-layer" class="blog-menu-layer" aria-hidden="true">
+  <div class="blog-menu-viewport">
+    <div class="blog-menu-stage">
+      <button type="button" class="blog-menu-overlay" data-blog-menu-close aria-label="메뉴 닫기"></button>
+      <aside class="blog-menu-aside" role="dialog" aria-modal="true" aria-label="사이트 메뉴">
+        <button type="button" class="blog-menu-close" data-blog-menu-close aria-label="메뉴 닫기"><span aria-hidden="true">×</span></button>
+        <div class="blog-menu-brand">YourTarot</div>
+        <nav class="blog-menu-nav" aria-label="주 메뉴">
+          <div class="blog-menu-block">${link("/tarot/start", "🔮", "오늘의 운세 보기")}</div>
+          <div class="blog-menu-block">
+            ${link("/about", "✨", "서비스 소개")}
+            ${link("/faq/", "❓", "자주 묻는 질문")}
+            <a href="${escapeHtml(blogHref)}" class="blog-menu-link"><span class="blog-menu-ico" aria-hidden="true">📝</span>${escapeHtml("블로그")}</a>
+            ${link("/masters", "👤", "타로 마스터 소개")}
+          </div>
+          <div class="blog-menu-block">
+            ${link("/recommended", "💬", "서비스 개선 의견 보내기")}
+            ${link("/partner", "🤝", "제휴 문의")}
+          </div>
+          <div class="blog-menu-block">
+            ${link("/login", "🔑", "로그인")}
+            <a href="${escapeHtml(mypageHref)}" class="blog-menu-link"><span class="blog-menu-ico" aria-hidden="true">🏠</span>${escapeHtml("마이페이지")}</a>
+          </div>
+          <div class="blog-menu-foot">
+            <a href="${escapeHtml(prefix("/terms"))}" class="blog-menu-footlink">${escapeHtml("이용약관")}</a>
+            <span class="blog-menu-dot" aria-hidden="true"> · </span>
+            <a href="${escapeHtml(prefix("/personal"))}" class="blog-menu-footlink">${escapeHtml("개인정보처리방침")}</a>
+            <span class="blog-menu-dot" aria-hidden="true"> · </span>
+            <a href="${escapeHtml(prefix("/disclaimer"))}" class="blog-menu-footlink">${escapeHtml("면책조항")}</a>
+          </div>
+          <div class="blog-menu-withdraw">
+            <div class="blog-menu-withdraw-ico" aria-hidden="true">😄</div>
+            <a href="${escapeHtml(mypageHref)}" class="blog-menu-withdraw-link">${escapeHtml("탈퇴하기")}</a>
+          </div>
+        </nav>
+      </aside>
+    </div>
+  </div>
+</div>`;
+}
+
+function blogMenuScript() {
+  return `<script src="${escapeHtml(prefix("/blog/blog-menu.js"))}" defer></script>`;
+}
+
+/** 앱 `Footer.tsx`와 동일 구조·링크 (정적 HTML) */
+function renderBlogSiteFooter() {
+  const eye = prefix("/assets/svg-logo-yourtarot.svg-699577b6-cedf-4beb-8082-e9fc60a6227c.png");
+  const ig = prefix("/assets/svg-ic-social-instagram.svg-2aa4e1f6-9ec8-47a4-8c99-29d5317dd055.png");
+  const talk = prefix("/assets/svg-ic-social-kakao.svg-20eca7d6-4d65-40b8-954f-17463d423b00.png");
+  const sep = '<span class="blog-footer-sep" aria-hidden="true">|</span>';
+  const navLink = (href, label) =>
+    `<a class="blog-footer-nav-link" href="${escapeHtml(prefix(href))}">${escapeHtml(label)}</a>`;
+  return `<div class="blog-footer-spacer" aria-hidden="true"></div>
+<footer class="blog-site-footer">
+  <div class="blog-site-footer-inner">
+    <img class="blog-footer-eye" src="${escapeHtml(eye)}" alt="" width="37" height="28" loading="lazy" decoding="async" />
+    <div class="blog-footer-rule"></div>
+    <nav class="blog-footer-nav" aria-label="푸터 링크">
+      ${navLink("/masters", "타로 마스터 소개")}
+      ${sep}
+      ${navLink("/about", "서비스 소개")}
+      ${sep}
+      ${navLink("/faq/", "FAQ")}
+      ${sep}
+      ${navLink("/terms", "이용약관")}
+      ${sep}
+      ${navLink("/personal", "개인정보처리방침")}
+      ${sep}
+      ${navLink("/disclaimer", "면책조항")}
+      ${sep}
+      ${navLink("/partner", "제휴문의")}
+    </nav>
+    <div class="blog-footer-rule blog-footer-rule--tight"></div>
+    <div class="blog-footer-legal">
+      <div>ASOG Co., Ltd. | CEO: jungyoungcheol</div>
+      <div>Address: Hancheon-Ro, Gangbuk-Gu, Seoul, Republic Of Korea</div>
+      <div>Business Registration Number: 370-54-00601</div>
+      <div>Mail-Order Business Registration Number: 2021-Seoul-Seodaemun-0013</div>
+      <div>Copyright© YourTarot Co., Ltd. All Rights Reserved.</div>
+    </div>
+    <div class="blog-footer-social">
+      <a href="#" aria-label="인스타그램" class="blog-footer-social-btn"><img src="${escapeHtml(ig)}" alt="" width="36" height="36" loading="lazy" decoding="async" /></a>
+      <a href="#" aria-label="카카오톡" class="blog-footer-social-btn"><img src="${escapeHtml(talk)}" alt="" width="36" height="36" loading="lazy" decoding="async" /></a>
+    </div>
+  </div>
+</footer>`;
 }
 
 function loadPosts() {
@@ -297,6 +395,9 @@ ${renderBlocks(post.content)}
 ${faqSection}${relatedHtml}
     </main>
   </div>
+${renderBlogSiteFooter()}
+${renderBlogMenuDrawer()}
+${blogMenuScript()}
 </body>
 </html>`;
 
@@ -330,13 +431,16 @@ function writeIndex(posts) {
 </head>
 <body>
   <div class="blog-wrap">
-${renderSiteHeader({ backHref: prefix("/"), backLabel: "← 유어타로 홈" })}
+${renderSiteHeader()}
     <main class="blog-main">
       <h1 class="blog-list-title">블로그</h1>
       <p class="blog-list-lead">검색과 AI 인용에 맞춘 정적 글 모음입니다.</p>
 ${body || "<p>아직 게시된 글이 없습니다.</p>\n"}
     </main>
   </div>
+${renderBlogSiteFooter()}
+${renderBlogMenuDrawer()}
+${blogMenuScript()}
 </body>
 </html>`;
 

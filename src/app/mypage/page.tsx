@@ -161,7 +161,7 @@ export default function MyPage() {
                 <div className="relative h-[64px] w-[43px] overflow-hidden rounded-md border border-white/20">
                   <Image
                     src={getMasterCardFrontSrc(item.masterId, item.card)}
-                    alt={`${master.name} 카드 ${item.card + 1}`}
+                    alt={`${master.name} ${item.card}번 카드`}
                     fill
                     className="object-cover"
                     sizes="43px"
@@ -170,10 +170,10 @@ export default function MyPage() {
                 <div className="min-w-0 flex-1">
                   <Link href={href} className="block">
                     <div className="truncate text-[13px] font-semibold text-white">
-                      {item.titleEn || `Card #${item.card + 1}`}
+                      {item.titleEn || `Card #${item.card}`}
                     </div>
                     <div className="truncate text-[12px] text-[#d8ccff]">
-                      {master.name} · {item.titleKo || `카드 ${item.card + 1}`}
+                      {master.name} · {item.titleKo || `${item.card}번 카드`}
                     </div>
                   </Link>
                   <div className="pt-1 text-[11px] text-[#aa9dce]">{formatSavedAt(item.createdAt)}</div>

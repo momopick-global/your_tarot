@@ -38,7 +38,8 @@ export function resolveCardReading(masterId: string, cardIndex: number): CardRea
   const key = String(cardIndex);
   const partial = POOL[masterId]?.[key] ?? {};
   const leg = getCardResultById(key);
-  const displayNo = cardIndex + 1;
+  /** 에셋 인덱스(0.webp~77.webp)와 동일 — 첫 장 = 0번 카드 */
+  const displayNo = cardIndex;
   const titleKo = partial.titleKo ?? leg.titleKo;
   const titleEn = partial.titleEn ?? leg.titleEn;
 
