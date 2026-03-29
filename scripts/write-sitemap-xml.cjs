@@ -24,7 +24,6 @@ const ROBOTS_SITEMAP_ORIGIN =
 const STATIC_PATHS = [
   "/",
   "/about/",
-  "/login/",
   "/menu/",
   "/masters/",
   "/terms/",
@@ -39,7 +38,6 @@ const STATIC_PATHS = [
   "/blog/psychology/",
   "/blog/test/",
   "/blog/life/",
-  "/mypage/",
   "/draw/today/",
   "/tarot/start/",
   "/tarot/draw/",
