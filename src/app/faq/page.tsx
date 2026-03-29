@@ -40,10 +40,12 @@ export default function FaqPage() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
       />
       <main className={styles.page}>
-        <FaqIntro />
-        <Suspense fallback={<FaqFallback />}>
-          <FaqView data={data} />
-        </Suspense>
+        <div className={styles.pageInner}>
+          <FaqIntro />
+          <Suspense fallback={<FaqFallback />}>
+            <FaqView data={data} />
+          </Suspense>
+        </div>
       </main>
     </>
   );

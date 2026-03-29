@@ -140,11 +140,7 @@
 
   function fullRender(data, state) {
     const cat = data.faq.find((c) => c.slug === state.activeSlug) ?? data.faq[0];
-    root.innerHTML =
-      renderIntro() +
-      renderTabs(data, state.activeSlug) +
-      renderPanels(data, state.activeSlug, state.openId) +
-      `<span class="faq-sr">현재 선택된 카테고리: ${esc(cat?.category ?? "")}</span>`;
+    root.innerHTML = `<div class="faq-inner">${renderIntro() + renderTabs(data, state.activeSlug) + renderPanels(data, state.activeSlug, state.openId) + `<span class="faq-sr">현재 선택된 카테고리: ${esc(cat?.category ?? "")}</span>`}</div>`;
   }
 
   async function main() {

@@ -20,11 +20,18 @@ body {
   min-height: 100dvh;
 }
 
+/* Next /about 와 동일 계층: 390 래퍼 + 350 본문 */
 .faq-page {
   width: 100%;
+  max-width: 390px;
+  margin: 0 auto;
+  padding: 1.5rem 1rem 3.5rem;
+}
+
+.faq-inner {
   max-width: 350px;
   margin: 0 auto;
-  padding: 1.25rem 1rem 3.5rem;
+  width: 100%;
 }
 
 .faq-intro {

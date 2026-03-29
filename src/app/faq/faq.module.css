@@ -1,9 +1,16 @@
+/* 서비스 소개(/about)와 동일: 바깥 390px, 본문 래퍼 350px */
 .page {
   width: 100%;
+  max-width: 390px;
+  margin: 0 auto;
+  padding: 1.5rem 1rem 3.5rem;
+  color: #ede9ff;
+}
+
+.pageInner {
   max-width: 350px;
   margin: 0 auto;
-  padding: 1.25rem 1rem 3.5rem;
-  color: #ede9ff;
+  width: 100%;
 }
 
 .intro {
