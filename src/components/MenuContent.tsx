@@ -28,6 +28,10 @@ export function MenuContent({
             <span aria-hidden>✨</span>
             서비스 소개
           </Link>
+          <Link href="/faq/" onClick={onLinkClick} className="flex items-center gap-3 text-[18px] font-semibold">
+            <span aria-hidden>❓</span>
+            자주 묻는 질문
+          </Link>
           <Link href="/masters" onClick={onLinkClick} className="flex items-center gap-3 text-[18px] font-semibold">
             <span aria-hidden>👤</span>
             타로 마스터 소개

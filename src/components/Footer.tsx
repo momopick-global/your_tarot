@@ -28,6 +28,10 @@ export function Footer() {
             서비스 소개
           </Link>
           <span className="text-[#666666]">|</span>
+          <Link className="text-[16px] text-white hover:text-neutral-10" href="/faq/">
+            FAQ
+          </Link>
+          <span className="text-[#666666]">|</span>
           <Link className="text-[16px] text-white hover:text-neutral-10" href="/terms">
             이용약관
           </Link>

@@ -5,6 +5,7 @@
   "scripts": {
     "dev": "next dev",
     "dev:3037": "WATCHPACK_POLLING=true next dev --port 3037 --hostname 127.0.0.1",
+    "faq:sync": "cp src/data/faq.json public/data/faq.json",
     "build": "next build",
     "start": "next start",
     "lint": "eslint",

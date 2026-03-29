@@ -16,6 +16,7 @@ const STATIC_PATHS = [
   "/disclaimer/",
   "/recommended/",
   "/partner/",
+  "/faq/",
   "/mypage/",
   "/draw/today/",
   "/tarot/start/",

@@ -1,0 +1,184 @@
+{
+  "faq": [
+    {
+      "category": "타로 이해하기",
+      "slug": "tarot-basics",
+      "items": [
+        {
+          "id": "what-is-tarot",
+          "question": "타로는 무엇인가요?",
+          "answer": "타로는 상징적인 카드 이미지를 통해 현재 상황과 감정의 흐름을 해석하는 도구입니다."
+        },
+        {
+          "id": "does-tarot-predict-future",
+          "question": "타로는 정말 미래를 맞추나요?",
+          "answer": "타로는 확정된 미래를 예언하기보다 현재의 흐름과 가능성을 읽는 방식으로 해석됩니다."
+        },
+        {
+          "id": "is-tarot-science",
+          "question": "타로는 과학인가요?",
+          "answer": "타로는 과학적 예측 도구라기보다 상징 해석과 직관을 기반으로 한 리딩 시스템입니다."
+        },
+        {
+          "id": "why-results-differ",
+          "question": "타로 결과는 왜 사람마다 다른가요?",
+          "answer": "질문 내용, 감정 상태, 선택 맥락이 다르기 때문에 같은 카드도 사람마다 다르게 해석될 수 있습니다."
+        },
+        {
+          "id": "should-i-believe-tarot",
+          "question": "타로를 믿어도 되나요?",
+          "answer": "타로는 절대적인 정답보다 현재를 돌아보고 방향을 점검하는 참고 도구로 활용하는 것이 좋습니다."
+        },
+        {
+          "id": "can-beginners-use-tarot",
+          "question": "타로는 초보자도 사용할 수 있나요?",
+          "answer": "타로는 초보자도 쉽게 접할 수 있으며, 질문이 명확할수록 결과를 이해하기가 쉬워집니다."
+        }
+      ]
+    },
+    {
+      "category": "이용 방법",
+      "slug": "how-to-use",
+      "items": [
+        {
+          "id": "is-yourtarot-free",
+          "question": "유어타로는 무료로 이용할 수 있나요?",
+          "answer": "유어타로는 기본 타로 해석 기능을 무료로 제공하며 일부 기능은 추후 확장될 수 있습니다."
+        },
+        {
+          "id": "can-use-without-signup",
+          "question": "회원가입 없이 사용할 수 있나요?",
+          "answer": "일부 기능은 로그인 없이 사용할 수 있지만 결과 저장과 개인화 기능은 로그인 후 이용할 수 있습니다."
+        },
+        {
+          "id": "how-to-start-reading",
+          "question": "유어타로는 어떻게 시작하나요?",
+          "answer": "원하는 리딩 메뉴를 선택한 뒤 질문을 떠올리고 카드를 선택하면 결과 해석을 확인할 수 있습니다."
+        },
+        {
+          "id": "how-many-times-per-day",
+          "question": "하루에 몇 번까지 사용할 수 있나요?",
+          "answer": "기본적으로 여러 번 사용할 수 있지만 같은 질문을 짧은 시간에 반복하는 것은 권장되지 않습니다."
+        },
+        {
+          "id": "mobile-available",
+          "question": "모바일에서도 사용할 수 있나요?",
+          "answer": "유어타로는 모바일 웹 환경에 맞춰 설계되어 스마트폰에서도 편하게 이용할 수 있습니다."
+        },
+        {
+          "id": "need-app-install",
+          "question": "앱 설치 없이 사용할 수 있나요?",
+          "answer": "유어타로는 웹 기반 서비스이므로 별도 앱 설치 없이 브라우저에서 바로 사용할 수 있습니다."
+        }
+      ]
+    },
+    {
+      "category": "결과 해석",
+      "slug": "reading-results",
+      "items": [
+        {
+          "id": "why-result-changes",
+          "question": "결과가 매번 다른 이유는 무엇인가요?",
+          "answer": "타로는 현재 상태를 반영하기 때문에 질문 시점과 감정 변화에 따라 결과가 달라질 수 있습니다."
+        },
+        {
+          "id": "can-ask-same-question",
+          "question": "같은 질문을 여러 번 해도 되나요?",
+          "answer": "같은 질문을 반복할 수는 있지만 해석의 일관성을 위해 어느 정도 시간을 두는 것이 좋습니다."
+        },
+        {
+          "id": "bad-result-meaning",
+          "question": "안 좋은 결과가 나오면 어떻게 해야 하나요?",
+          "answer": "부정적인 결과는 확정된 불행이 아니라 현재 흐름에서 주의할 점을 알려주는 신호로 볼 수 있습니다."
+        },
+        {
+          "id": "how-accurate-is-reading",
+          "question": "타로 결과 해석은 얼마나 정확한가요?",
+          "answer": "타로 해석은 상징과 질문 맥락을 바탕으로 하며, 정확도는 질문의 명확성과 해석 수용 방식에 영향을 받습니다."
+        },
+        {
+          "id": "can-result-change",
+          "question": "타로 결과는 바뀔 수 있나요?",
+          "answer": "타로 결과는 현재 흐름을 보여주기 때문에 행동과 선택이 달라지면 이후 흐름도 달라질 수 있습니다."
+        },
+        {
+          "id": "how-to-read-one-card",
+          "question": "한 장 뽑기 결과는 어떻게 이해하면 되나요?",
+          "answer": "한 장 뽑기는 현재 가장 핵심적인 메시지를 압축해서 보여주는 간단한 리딩 방식입니다."
+        }
+      ]
+    },
+    {
+      "category": "서비스 & 보안",
+      "slug": "service-security",
+      "items": [
+        {
+          "id": "is-ai-used",
+          "question": "유어타로는 AI가 해석하나요?",
+          "answer": "유어타로는 카드 의미 구조와 해석 로직을 기반으로 결과를 제공하며 서비스 방식은 계속 고도화될 수 있습니다."
+        },
+        {
+          "id": "is-personal-info-safe",
+          "question": "개인정보는 안전하게 보호되나요?",
+          "answer": "유어타로는 서비스 운영에 필요한 범위 내에서 개인정보를 보호하고 안전하게 관리하는 것을 원칙으로 합니다."
+        },
+        {
+          "id": "how-login-managed",
+          "question": "로그인 정보는 어떻게 관리되나요?",
+          "answer": "로그인 정보는 인증 서비스 정책에 따라 안전하게 처리되며 사용자는 간편 로그인 방식으로 접근할 수 있습니다."
+        },
+        {
+          "id": "will-service-stay-free",
+          "question": "서비스는 계속 무료인가요?",
+          "answer": "기본 기능은 무료 중심으로 제공될 수 있으며 일부 고급 기능은 추후 유료 옵션으로 확장될 수 있습니다."
+        },
+        {
+          "id": "what-if-error-occurs",
+          "question": "오류가 발생하면 어떻게 해야 하나요?",
+          "answer": "페이지 새로고침 후에도 문제가 계속되면 문의 채널을 통해 오류 상황을 전달하는 것이 가장 빠릅니다."
+        },
+        {
+          "id": "can-delete-account",
+          "question": "회원 탈퇴나 데이터 삭제가 가능한가요?",
+          "answer": "회원 기능이 제공되는 경우 사용자는 계정 삭제나 저장 데이터 정리를 요청할 수 있습니다."
+        }
+      ]
+    },
+    {
+      "category": "자주 묻는 질문",
+      "slug": "common-questions",
+      "items": [
+        {
+          "id": "when-daily-reading-updates",
+          "question": "오늘의 타로 운세는 언제 바뀌나요?",
+          "answer": "오늘의 타로 운세는 일반적으로 하루 단위로 갱신되며 같은 날에는 동일한 흐름으로 해석하는 것이 좋습니다."
+        },
+        {
+          "id": "where-check-card-meaning",
+          "question": "타로 카드 의미는 어디서 확인할 수 있나요?",
+          "answer": "유어타로의 카드 소개 또는 해석 페이지에서 각 카드의 기본 의미를 확인할 수 있습니다."
+        },
+        {
+          "id": "is-love-tarot-accurate",
+          "question": "연애 타로는 정확한가요?",
+          "answer": "연애 타로는 관계의 감정 흐름과 패턴을 읽는 데 도움을 주며 참고용으로 활용할 때 가장 효과적입니다."
+        },
+        {
+          "id": "can-tarot-help-career",
+          "question": "타로로 진로나 일 문제를 볼 수 있나요?",
+          "answer": "타로는 진로나 업무에 대한 고민을 정리하고 선택의 방향을 점검하는 데 도움을 줄 수 있습니다."
+        },
+        {
+          "id": "can-share-results",
+          "question": "타로 결과를 다른 사람과 공유해도 되나요?",
+          "answer": "타로 결과는 개인 해석이 포함되므로 참고용으로 공유하는 것은 가능하지만 맥락 설명이 함께 있으면 더 좋습니다."
+        },
+        {
+          "id": "best-time-to-read",
+          "question": "타로는 언제 보는 것이 좋나요?",
+          "answer": "타로는 질문에 집중할 수 있는 조용한 시간에 보는 것이 가장 좋습니다."
+        }
+      ]
+    }
+  ]
+}
