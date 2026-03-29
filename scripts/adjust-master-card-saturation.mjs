@@ -1,5 +1,5 @@
 /**
- * 테스트용: 01_Cassian 은 건드리지 않고, 02~09 마스터 폴더의 PNG에만
+ * 테스트용: 01_Cassian 은 건드리지 않고, 02~09 마스터 폴더의 WebP에만
  * 폴더마다 다른 채도(saturation)를 적용합니다.
  *
  * sharp saturation: 1 = 원본, 0에 가까울수록 무채색, 1보다 크면 채도 상승
@@ -33,7 +33,7 @@ async function main() {
     const folder = path.join(root, dir);
     let names;
     try {
-      names = (await fs.readdir(folder)).filter((n) => n.endsWith(".png"));
+      names = (await fs.readdir(folder)).filter((n) => n.endsWith(".webp"));
     } catch (e) {
       console.warn(`skip ${dir}:`, e.message);
       continue;
@@ -42,7 +42,7 @@ async function main() {
     for (const name of names) {
       const input = path.join(folder, name);
       const tmp = path.join(folder, `.__tmp_${name}`);
-      await sharp(input).modulate({ saturation }).png().toFile(tmp);
+      await sharp(input).modulate({ saturation }).webp({ quality: 88 }).toFile(tmp);
       await fs.rename(tmp, input);
     }
   }

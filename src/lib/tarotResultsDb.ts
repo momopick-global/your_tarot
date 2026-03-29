@@ -25,7 +25,7 @@ function normalizeId(id: number | string): string {
 
 /** 카드 이미지 경로에서 카드 인덱스 (0~77) 추출 */
 export function cardIndexFromStoredImagePath(path: string): number {
-  const m = /\/(\d+)\.png(?:\?.*)?$/i.exec(path);
+  const m = /\/(\d+)\.(png|webp)(?:\?.*)?$/i.exec(path);
   if (!m) return 0;
   const n = parseInt(m[1], 10);
   return Number.isFinite(n) ? Math.min(77, Math.max(0, n)) : 0;

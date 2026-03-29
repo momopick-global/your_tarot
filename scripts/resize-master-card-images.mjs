@@ -1,8 +1,8 @@
 /**
- * 마스터 카드 PNG 일괄 리사이즈 (용량·로딩 개선용)
+ * 마스터 카드 WebP 일괄 리사이즈 (용량·로딩 개선용)
  *
  * 기본: public/images/cards 아래 `NN_Name` 형태 폴더 전부
- * 각 폴더의 루트에 있는 *.png 만 처리 (하위 폴더 무시 → 예: 01_Cassian/원본 은 건드리지 않음)
+ * 각 폴더의 루트에 있는 *.webp 만 처리 (하위 폴더 무시 → 예: 01_Cassian/원본 은 건드리지 않음)
  * 환경변수로 조절:
  *   MAX_WIDTH=512          최대 가로(px), 비율 유지. 이미 더 작으면 확대 안 함
  *   ONLY=01_Cassian,02_Aiden   콤마로 특정 폴더만 (비우면 전부)
@@ -52,8 +52,8 @@ async function main() {
   for (const dir of folders) {
     const folder = path.join(root, dir);
     const entries = await fs.readdir(folder, { withFileTypes: true });
-    const names = entries.filter((e) => e.isFile() && e.name.endsWith(".png")).map((e) => e.name);
-    console.log(`${dir}: ${names.length} png (root only)`);
+    const names = entries.filter((e) => e.isFile() && e.name.endsWith(".webp")).map((e) => e.name);
+    console.log(`${dir}: ${names.length} webp (root only)`);
 
     for (const name of names) {
       const input = path.join(folder, name);
@@ -63,10 +63,7 @@ async function main() {
           width: maxWidth,
           withoutEnlargement: true,
         })
-        .png({
-          compressionLevel: 9,
-          effort: 10,
-        })
+        .webp({ quality: 88 })
         .toFile(tmp);
       await fs.rename(tmp, input);
     }

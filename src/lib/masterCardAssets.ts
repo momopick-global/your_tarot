@@ -2,7 +2,7 @@ import { withAssetBase } from "./publicPath";
 
 /**
  * 마스터 id ↔ 폴더명 (01_Cassian … 09_Pipi)
- * 앞면: /images/cards/{folder}/{0-77}.png
+ * 앞면: /images/cards/{folder}/{0-77}.webp
  * 뒷면: /images/masters/{folder}/card-back.webp
  */
 export const MASTER_CARD_FOLDER: Record<string, string> = {
@@ -28,7 +28,7 @@ export function getMasterCardFolder(masterId: string): string {
 export function getMasterCardFrontSrc(masterId: string, cardIndex: number): string {
   const folder = getMasterCardFolder(masterId);
   const n = Math.min(77, Math.max(0, Math.floor(cardIndex)));
-  return withAssetBase(`/images/cards/${folder}/${n}.png`);
+  return withAssetBase(`/images/cards/${folder}/${n}.webp`);
 }
 
 /** 카드 뒷면 — 마스터별 card-back.webp (`public/images/masters/{folder}/`) */

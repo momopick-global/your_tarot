@@ -1,6 +1,6 @@
 /**
- * 테스트용: 마스터별 카드 PNG에 색을 과하게 입힘 (01_Cassian 제외)
- * 각 폴더 루트의 *.png 만 처리 (하위 폴더 예: 원본/ 무시)
+ * 테스트용: 마스터별 카드 WebP에 색을 과하게 입힘 (01_Cassian 제외)
+ * 각 폴더 루트의 *.webp 만 처리 (하위 폴더 예: 원본/ 무시)
  *
  * 실행: node scripts/strong-tint-master-cards.mjs
  */
@@ -53,7 +53,7 @@ async function processFile(inputPath, tint) {
       { input: overlay, blend: "overlay" },
       { input: overlay, blend: "soft-light" },
     ])
-    .png({ compressionLevel: 9, effort: 10 })
+    .webp({ quality: 88 })
     .toFile(tmp);
   await fs.rename(tmp, inputPath);
 }
@@ -68,7 +68,7 @@ async function main() {
       console.warn(`skip ${tint.dir}:`, e.message);
       continue;
     }
-    const names = entries.filter((e) => e.isFile() && e.name.endsWith(".png")).map((e) => e.name);
+    const names = entries.filter((e) => e.isFile() && e.name.endsWith(".webp")).map((e) => e.name);
     console.log(`${tint.dir}: rgb(${tint.r},${tint.g},${tint.b}) alpha=${tint.alpha} → ${names.length} files`);
     for (const name of names) {
       await processFile(path.join(folder, name), tint);
