@@ -33,6 +33,16 @@ export async function submitFeedback(payload: FeedbackPayload) {
     return { success: true as const };
   }
 
-  return postJson<{ success: boolean }>(API_ENDPOINTS.feedback, payload);
+  try {
+    return postJson<{ success: boolean }>(API_ENDPOINTS.feedback, payload);
+  } catch (error) {
+    // Static export deployment has no Next API routes (/api/*).
+    if (error instanceof Error && /API request failed: (404|405)/.test(error.message)) {
+      throw new Error(
+        "의견 전송 기능을 점검 중입니다. 잠시 후 다시 시도해 주세요. 문제가 계속되면 이메일로 문의해 주세요.",
+      );
+    }
+    throw error;
+  }
 }
 
